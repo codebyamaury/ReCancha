@@ -439,6 +439,39 @@ export class RecanchaService {
     this.mostrarToast(`Rol asignado: ${nuevoNivel === 'director' ? 'Psicólogo Principal (Director)' : 'Especialista Clínico'}`);
   }
 
+  transferirDireccionPrincipal(id: string) {
+    const usuarioActualEmail = (this.usuarioActual().email || '').toLowerCase();
+    const lista = this.psicologos().map(p => {
+      if (p.id === id) {
+        return { ...p, nivel: 'director' as NivelPsicologo };
+      }
+      if (p.email.toLowerCase() === usuarioActualEmail) {
+        return { ...p, nivel: 'especialista' as NivelPsicologo };
+      }
+      return p;
+    });
+    this.psicologos.set(lista);
+    this.guardarPsicologosLocal(lista);
+
+    const nuevoDirector = lista.find(p => p.id === id);
+    if (nuevoDirector) {
+      this.fb.guardarPsicologo(nuevoDirector).catch(e => console.warn(e));
+    }
+    const anteriorDirector = lista.find(p => p.email.toLowerCase() === usuarioActualEmail);
+    if (anteriorDirector) {
+      this.fb.guardarPsicologo(anteriorDirector).catch(e => console.warn(e));
+    }
+
+    // Actualizar usuario actual a especialista
+    this.usuarioActual.update(u => {
+      const uUp = { ...u, nivel: 'especialista' as NivelPsicologo };
+      try { localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(uUp)); } catch (e) {}
+      return uUp;
+    });
+
+    this.mostrarToast(`Dirección Principal transferida con éxito a ${nuevoDirector?.nombre || 'el nuevo director'}.`);
+  }
+
   cambiarEstadoPsicologo(id: string, nuevoEstado: 'activo' | 'inactivo') {
     const lista = this.psicologos().map(p => {
       if (p.id === id) {

@@ -51,6 +51,23 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
         </div>
       </header>
 
+      <!-- Guía Rápida para el Psicólogo Principal -->
+      <div class="role-guide-banner" *ngIf="service.esPsicologoPrincipal()">
+        <div class="guide-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+        </div>
+        <div class="guide-content">
+          <strong>¿Cómo darle el rol de Psicólogo Principal a otra persona?</strong>
+          <p>
+            Puedes hacerlo de 2 formas:
+            <strong>1)</strong> En la tarjeta del colega, haz clic en el botón dorado <strong>"👑 Nombrar Psicólogo Principal"</strong> (o cambia su selector de rol a <em>Psicólogo Principal</em>). Podrás elegir si compartir la dirección o transferirla por completo.
+            <strong>2)</strong> Al registrar un nuevo colega con el botón <strong>"+ Registrar Psicólogo/a"</strong>, selecciona directamente el rol <em>Psicólogo Principal (Director)</em>.
+          </p>
+        </div>
+      </div>
+
       <!-- Métricas Resumen -->
       <section class="stats-row">
         <div class="stat-box">
@@ -181,7 +198,11 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
           </div>
 
           <div class="card-main-info">
-            <h3 class="member-name">{{ p.nombre }}</h3>
+            <div class="name-row">
+              <h3 class="member-name">{{ p.nombre }}</h3>
+              <span *ngIf="esUsuarioActual(p)" class="badge-you">(Tú)</span>
+            </div>
+
             <p class="member-email" (click)="copiarTexto(p.email, 'Correo copiado')" title="Clic para copiar correo">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect width="20" height="16" x="2" y="4" rx="2"></rect>
@@ -207,18 +228,42 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
             </span>
           </div>
 
+          <!-- BOTÓN DESTACADO: NOMBRAR PSICÓLOGO PRINCIPAL -->
+          <div class="principal-promotion-bar" *ngIf="service.esPsicologoPrincipal() && !esUsuarioActual(p)">
+            <button 
+              *ngIf="p.nivel === 'especialista'"
+              type="button" 
+              class="btn-nombrar-principal" 
+              (click)="abrirModalNombrarPrincipal(p)"
+              title="Hacer clic para otorgarle el rol directivo de Psicólogo Principal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <span>👑 Nombrar Psicólogo Principal</span>
+            </button>
+
+            <button 
+              *ngIf="p.nivel === 'director'"
+              type="button" 
+              class="btn-revertir-principal" 
+              (click)="onCambiarRol(p, 'especialista')"
+              title="Cambiar rol a Especialista Clínico">
+              <span>Cambiar a Especialista Clínico</span>
+            </button>
+          </div>
+
           <!-- Acciones de Gestión y Control (Exclusivas para Psicólogo Principal) -->
           <div class="card-actions">
-            <!-- Modificar Rol (Solo el Director puede asignar o degradar rol) -->
+            <!-- Modificar Rol mediante Select -->
             <div class="action-role-wrapper" *ngIf="service.esPsicologoPrincipal()">
-              <label class="action-label" for="rol-select-{{ p.id }}">Asignar rol:</label>
+              <label class="action-label" for="rol-select-{{ p.id }}">Rol asignado:</label>
               <select 
                 id="rol-select-{{ p.id }}" 
                 class="role-select" 
                 [ngModel]="p.nivel" 
                 (ngModelChange)="onCambiarRol(p, $event)">
-                <option value="director">Psicólogo Principal (Director)</option>
-                <option value="especialista">Especialista Clínico</option>
+                <option value="director">👑 Psicólogo Principal (Director)</option>
+                <option value="especialista">🩺 Especialista Clínico</option>
               </select>
             </div>
 
@@ -237,13 +282,13 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
               </button>
 
               <button 
-                *ngIf="service.esPsicologoPrincipal()"
+                *ngIf="service.esPsicologoPrincipal() && !esUsuarioActual(p)"
                 type="button" 
                 class="btn-action-ghost" 
                 [class.text-amber]="p.estado === 'activo'"
                 [class.text-green]="p.estado === 'inactivo'"
                 (click)="onToggleEstado(p)" 
-                [title]="p.estado === 'activo' ? 'Suspender acceso' : 'Reactivar acceso'">
+                [title]="p.estado === 'activo' ? 'Suspender acceso temporalmente' : 'Reactivar acceso'">
                 <svg *ngIf="p.estado === 'activo'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
@@ -255,11 +300,11 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
               </button>
 
               <button 
-                *ngIf="service.esPsicologoPrincipal() && p.email !== service.usuarioActual().email"
+                *ngIf="service.esPsicologoPrincipal() && !esUsuarioActual(p)"
                 type="button" 
                 class="btn-action-ghost btn-delete" 
-                (click)="onEliminarPsicologo(p)" 
-                title="Eliminar profesional del equipo">
+                (click)="abrirConfirmacionEliminar(p)" 
+                title="Retirar profesional del equipo">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -269,6 +314,79 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
           </div>
         </div>
       </section>
+
+      <!-- ================= MODAL: NOMBRAR PSICÓLOGO PRINCIPAL ================= -->
+      <div class="modal-overlay" *ngIf="psicologoParaPrincipal" (click)="psicologoParaPrincipal = null">
+        <div class="modal-card modal-principal" (click)="$event.stopPropagation()">
+          <div class="principal-modal-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+          </div>
+          <h2 class="principal-modal-title">Nombrar Psicólogo Principal</h2>
+          <p class="principal-modal-subtitle">
+            Estás a punto de otorgarle facultades de <strong>Psicólogo Principal (Director Clínico)</strong> a <strong>{{ psicologoParaPrincipal.nombre }}</strong>.
+          </p>
+
+          <div class="transfer-options-list">
+            <label 
+              class="transfer-option-card" 
+              [class.selected]="modalModoPrincipal === 'compartir'"
+              (click)="modalModoPrincipal = 'compartir'">
+              <div class="option-radio-dot" [class.dot-checked]="modalModoPrincipal === 'compartir'"></div>
+              <div class="option-info">
+                <strong>Compartir Dirección Clínica (Recomendado)</strong>
+                <span>Ambos tendrán rol de Psicólogo Principal para administrar el equipo, asignar roles y registrar profesionales.</span>
+              </div>
+            </label>
+
+            <label 
+              class="transfer-option-card" 
+              [class.selected]="modalModoPrincipal === 'transferir'"
+              (click)="modalModoPrincipal = 'transferir'">
+              <div class="option-radio-dot" [class.dot-checked]="modalModoPrincipal === 'transferir'"></div>
+              <div class="option-info">
+                <strong>Transferir Dirección Principal Completa</strong>
+                <span>Ceder el rol de Director Principal exclusivamente a {{ psicologoParaPrincipal.nombre }}. Tu cuenta actual pasará a ser Especialista Clínico.</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="psicologoParaPrincipal = null">Cancelar</button>
+            <button type="button" class="btn-confirm-principal" (click)="confirmarNombramientoPrincipal()">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Confirmar Nombramiento</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= MODAL: CONFIRMAR ELIMINACIÓN (SIN ALERTS NATIVOS) ================= -->
+      <div class="modal-overlay" *ngIf="psicologoAEliminar" (click)="psicologoAEliminar = null">
+        <div class="modal-card modal-confirm" (click)="$event.stopPropagation()">
+          <div class="confirm-icon-box danger">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <h3 class="confirm-title">¿Retirar del equipo clínico?</h3>
+          <p class="confirm-desc">
+            Estás a punto de retirar a <strong>{{ psicologoAEliminar.nombre }}</strong> ({{ psicologoAEliminar.email }}). Esta acción revocará sus accesos y credenciales de acceso a la plataforma.
+          </p>
+          <div class="confirm-actions">
+            <button type="button" class="btn-cancel" (click)="psicologoAEliminar = null">Cancelar</button>
+            <button type="button" class="btn-danger-confirm" (click)="confirmarEliminacionPsicologo()">
+              <span>Sí, retirar del equipo</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- ================= MODAL: REGISTRAR NUEVO PSICÓLOGO ================= -->
       <div class="modal-overlay" *ngIf="mostrarModalRegistro" (click)="cerrarModalRegistro()">
@@ -365,7 +483,6 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                   class="role-choice-card" 
                   [class.selected]="nuevoNivel === 'especialista'"
                   (click)="nuevoNivel = 'especialista'">
-                  <input type="radio" name="nivel" value="especialista" [(ngModel)]="nuevoNivel" class="sr-only">
                   <div class="choice-icon blue">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                       <circle cx="12" cy="7" r="4"></circle>
@@ -382,7 +499,6 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                   class="role-choice-card" 
                   [class.selected]="nuevoNivel === 'director'"
                   (click)="nuevoNivel = 'director'">
-                  <input type="radio" name="nivel" value="director" [(ngModel)]="nuevoNivel" class="sr-only">
                   <div class="choice-icon gold">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
@@ -493,7 +609,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       justify-content: space-between;
       align-items: flex-start;
       gap: 24px;
-      margin-bottom: 26px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
@@ -593,6 +709,45 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       box-shadow: 0 6px 20px rgba(219, 39, 119, 0.35);
     }
 
+    /* ================= ROLE GUIDE BANNER ================= */
+    .role-guide-banner {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 1.5px solid #fde68a;
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.08);
+    }
+
+    .guide-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #fde68a;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .guide-content strong {
+      display: block;
+      color: #92400e;
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+    }
+
+    .guide-content p {
+      color: #78350f;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
     /* ================= STATS ROW ================= */
     .stats-row {
       display: grid;
@@ -671,9 +826,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       padding: 8px 12px;
     }
 
-    .search-icon {
-      color: #94a3b8;
-    }
+    .search-icon { color: #94a3b8; }
 
     .search-input {
       border: none;
@@ -741,7 +894,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       padding: 22px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
       position: relative;
       transition: all 0.2s ease;
@@ -754,7 +907,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
 
     .team-card.card-director {
       border-color: #fde68a;
-      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 60px);
+      background: linear-gradient(180deg, #fffdf5 0%, #ffffff 70px);
     }
 
     .team-card.card-inactivo {
@@ -869,11 +1022,27 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       gap: 6px;
     }
 
+    .name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .member-name {
       font-size: 1.12rem;
       font-weight: 800;
       color: #0f172a;
       line-height: 1.3;
+      margin: 0;
+    }
+
+    .badge-you {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #2563eb;
+      background: #dbeafe;
+      padding: 2px 6px;
+      border-radius: 6px;
     }
 
     .member-email {
@@ -885,6 +1054,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       cursor: pointer;
       transition: color 0.15s ease;
       word-break: break-all;
+      margin: 0;
     }
 
     .member-email:hover {
@@ -920,6 +1090,53 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       color: #334155;
     }
 
+    /* ================= BOTÓN DESTACADO NOMBRAR PRINCIPAL ================= */
+    .principal-promotion-bar {
+      margin-top: 2px;
+    }
+
+    .btn-nombrar-principal {
+      width: 100%;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      border: none;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nombrar-principal:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(217, 119, 6, 0.35);
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+
+    .btn-revertir-principal {
+      width: 100%;
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-revertir-principal:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
     /* Actions */
     .card-actions {
       display: flex;
@@ -927,7 +1144,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       gap: 10px;
       margin-top: auto;
       border-top: 1px solid #f1f5f9;
-      padding-top: 14px;
+      padding-top: 12px;
     }
 
     .action-role-wrapper {
@@ -989,13 +1206,8 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       border-color: #cbd5e1;
     }
 
-    .btn-action-ghost.text-amber {
-      color: #b45309;
-    }
-
-    .btn-action-ghost.text-green {
-      color: #15803d;
-    }
+    .btn-action-ghost.text-amber { color: #b45309; }
+    .btn-action-ghost.text-green { color: #15803d; }
 
     .btn-delete {
       flex: 0 0 36px;
@@ -1013,7 +1225,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(4px);
       z-index: 1000;
       display: flex;
@@ -1034,9 +1246,174 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       animation: modalSlide 0.2s ease-out;
     }
 
-    .modal-card.modal-sm {
-      max-width: 460px;
+    .modal-card.modal-sm { max-width: 460px; }
+
+    /* Modal Nombrar Principal */
+    .modal-card.modal-principal {
+      max-width: 480px;
+      text-align: center;
     }
+
+    .principal-modal-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fef3c7;
+      color: #d97706;
+      border: 3px solid #fde68a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px auto;
+    }
+
+    .principal-modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+
+    .principal-modal-subtitle {
+      color: #64748b;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      margin: 0 0 18px 0;
+    }
+
+    .transfer-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .transfer-option-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+
+    .transfer-option-card:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .transfer-option-card.selected {
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .option-radio-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .option-radio-dot.dot-checked {
+      border-color: #d97706;
+      background: #d97706;
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+
+    .option-info strong {
+      display: block;
+      font-size: 0.86rem;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .option-info span {
+      display: block;
+      font-size: 0.76rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .btn-confirm-principal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+      transition: all 0.15s ease;
+    }
+
+    .btn-confirm-principal:hover {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+
+    /* Modal Confirm Delete */
+    .modal-card.modal-confirm {
+      max-width: 440px;
+      text-align: center;
+      padding: 28px 24px;
+    }
+
+    .confirm-icon-box.danger {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #fee2e2;
+      color: #dc2626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+
+    .confirm-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+
+    .confirm-desc {
+      font-size: 0.88rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0 0 22px 0;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .confirm-actions button { flex: 1; }
+
+    .btn-danger-confirm {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-danger-confirm:hover { background: #b91c1c; }
 
     @keyframes modalSlide {
       from { transform: translateY(15px); opacity: 0; }
@@ -1048,9 +1425,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       position: relative;
     }
 
-    .modal-badge-row {
-      margin-bottom: 8px;
-    }
+    .modal-badge-row { margin-bottom: 8px; }
 
     .modal-title {
       font-size: 1.35rem;
@@ -1155,9 +1530,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    .input-with-toggle .form-control {
-      padding-right: 40px;
-    }
+    .input-with-toggle .form-control { padding-right: 40px; }
 
     .btn-toggle-eye {
       position: absolute;
@@ -1244,9 +1617,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       cursor: pointer;
     }
 
-    .btn-cancel:hover {
-      background: #e2e8f0;
-    }
+    .btn-cancel:hover { background: #e2e8f0; }
 
     .btn-submit-save {
       display: inline-flex;
@@ -1314,36 +1685,15 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       color: #2563eb;
     }
 
-    .font-bold {
-      font-weight: 700;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
+    .font-bold { font-weight: 700; }
 
     /* Responsive */
     @media (max-width: 640px) {
-      .roles-choice-grid {
-        grid-template-columns: 1fr;
-      }
-      .page-header {
-        flex-direction: column;
-      }
-      .btn-primary-add {
-        width: 100%;
-        justify-content: center;
-      }
-      .stats-row {
-        grid-template-columns: 1fr 1fr;
-      }
+      .roles-choice-grid { grid-template-columns: 1fr; }
+      .page-header { flex-direction: column; }
+      .btn-primary-add { width: 100%; justify-content: center; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .role-guide-banner { flex-direction: column; }
     }
   `]
 })
@@ -1363,6 +1713,18 @@ export class EquipoPsicologosComponent {
   nuevaEspecialidad = '';
 
   psicologoCredenciales: PsicologoMiembro | null = null;
+
+  // Estado para nombrar Psicólogo Principal
+  psicologoParaPrincipal: PsicologoMiembro | null = null;
+  modalModoPrincipal: 'compartir' | 'transferir' = 'compartir';
+
+  // Estado para eliminar psicólogo (Sin alerts nativos)
+  psicologoAEliminar: PsicologoMiembro | null = null;
+
+  esUsuarioActual(p: PsicologoMiembro): boolean {
+    const actual = this.service.usuarioActual();
+    return p.id === actual.uid || p.email.toLowerCase() === (actual.email || '').toLowerCase();
+  }
 
   get psicologosFiltrados(): PsicologoMiembro[] {
     let lista = this.service.psicologos();
@@ -1438,6 +1800,24 @@ export class EquipoPsicologosComponent {
     this.psicologoCredenciales = creado;
   }
 
+  /* Nombrar Psicólogo Principal */
+  abrirModalNombrarPrincipal(p: PsicologoMiembro) {
+    this.psicologoParaPrincipal = p;
+    this.modalModoPrincipal = 'compartir';
+  }
+
+  confirmarNombramientoPrincipal() {
+    if (!this.psicologoParaPrincipal) return;
+
+    if (this.modalModoPrincipal === 'transferir') {
+      this.service.transferirDireccionPrincipal(this.psicologoParaPrincipal.id);
+    } else {
+      this.service.cambiarRolPsicologo(this.psicologoParaPrincipal.id, 'director');
+    }
+
+    this.psicologoParaPrincipal = null;
+  }
+
   onCambiarRol(psicologo: PsicologoMiembro, nuevoNivel: NivelPsicologo) {
     if (psicologo.nivel === nuevoNivel) return;
     this.service.cambiarRolPsicologo(psicologo.id, nuevoNivel);
@@ -1448,9 +1828,15 @@ export class EquipoPsicologosComponent {
     this.service.cambiarEstadoPsicologo(psicologo.id, nuevoEstado);
   }
 
-  onEliminarPsicologo(psicologo: PsicologoMiembro) {
-    if (confirm(`¿Estás seguro de retirar a ${psicologo.nombre} del equipo clínico? Esta acción revocará sus accesos a la plataforma.`)) {
-      this.service.eliminarPsicologo(psicologo.id);
+  /* Eliminar Profesional (Custom Modal sin alerts nativos) */
+  abrirConfirmacionEliminar(p: PsicologoMiembro) {
+    this.psicologoAEliminar = p;
+  }
+
+  confirmarEliminacionPsicologo() {
+    if (this.psicologoAEliminar) {
+      this.service.eliminarPsicologo(this.psicologoAEliminar.id);
+      this.psicologoAEliminar = null;
     }
   }
 

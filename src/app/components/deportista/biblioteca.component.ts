@@ -251,6 +251,26 @@ import { RecursoBiblioteca, ModalidadEjercicio } from '../../models/recancha.mod
         </form>
       </div>
     </div>
+
+    <!-- Modal Confirmación Eliminar Recurso (Sin alert/confirm nativo) -->
+    <div class="modal-overlay" *ngIf="recursoAEliminar" (click)="recursoAEliminar = null">
+      <div class="confirm-modal-box" (click)="$event.stopPropagation()">
+        <div class="confirm-icon danger">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </div>
+        <h3 class="confirm-modal-title">¿Retirar recurso de la biblioteca?</h3>
+        <p class="confirm-modal-desc">
+          Estás a punto de retirar <strong>"{{ recursoAEliminar.titulo }}"</strong>. Esta acción quitará el ejercicio de la vista de todos los deportistas.
+        </p>
+        <div class="confirm-modal-buttons">
+          <button type="button" class="btn-modal-cancel" (click)="recursoAEliminar = null">Cancelar</button>
+          <button type="button" class="btn-confirm-delete" (click)="confirmarEliminarRecurso()">Retirar recurso</button>
+        </div>
+      </div>
+    </div>
   `,
   styles: [`
     .head-row {
@@ -637,6 +657,68 @@ import { RecursoBiblioteca, ModalidadEjercicio } from '../../models/recancha.mod
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
     }
 
+    /* Confirm Delete Modal */
+    .confirm-modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+      animation: modalSlide 0.2s ease-out;
+    }
+    .confirm-icon.danger {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fee2e2;
+      color: #dc2626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .confirm-modal-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+    .confirm-modal-desc {
+      font-size: 0.88rem;
+      color: #64748b;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .confirm-modal-buttons {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .confirm-modal-buttons button {
+      flex: 1;
+    }
+    .btn-confirm-delete {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.86rem;
+      cursor: pointer;
+      min-height: 44px;
+      transition: background 0.15s ease;
+    }
+    .btn-confirm-delete:hover {
+      background: #b91c1c;
+    }
+
     @media (max-width: 600px) {
       .form-row-2 { grid-template-columns: 1fr; gap: 10px; }
       .head-row { flex-direction: column; align-items: stretch; }
@@ -699,9 +781,11 @@ export class BibliotecaComponent {
     }
   }
 
+  recursoAEliminar: RecursoBiblioteca | null = null;
+
   guardarNuevoRecurso() {
     if (!this.nuevoTitulo.trim() || !this.nuevaDescripcion.trim()) {
-      alert('Por favor completa el título y la descripción del recurso.');
+      this.service.mostrarToast('Por favor completa el título y la descripción del recurso.');
       return;
     }
 
@@ -729,8 +813,13 @@ export class BibliotecaComponent {
   }
 
   eliminarRecurso(item: RecursoBiblioteca) {
-    if (confirm(`¿Deseas retirar el recurso clínico "${item.titulo}" de la biblioteca?`)) {
-      this.service.eliminarRecursoBiblioteca(item.id);
+    this.recursoAEliminar = item;
+  }
+
+  confirmarEliminarRecurso() {
+    if (this.recursoAEliminar) {
+      this.service.eliminarRecursoBiblioteca(this.recursoAEliminar.id);
+      this.recursoAEliminar = null;
     }
   }
 
