@@ -128,14 +128,18 @@ import { RecanchaService } from '../../services/recancha.service';
     </div>
   `,
   styles: [`
-    .head h2 { font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .head p { color: #64748b; font-size: 0.92rem; margin-top: 4px; margin-bottom: 26px; }
+    .head h2 { font-size: clamp(1.35rem, 4vw, 1.7rem); font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .head p { color: #64748b; font-size: clamp(0.82rem, 2.2vw, 0.92rem); margin-top: 4px; margin-bottom: 22px; line-height: 1.45; }
     
-    .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+    .grid-layout { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); 
+      gap: clamp(14px, 2.5vw, 20px); 
+    }
     
     .card-seg { 
       background: #ffffff; 
-      padding: 24px; 
+      padding: clamp(18px, 3.5vw, 24px); 
       border-radius: 14px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -153,6 +157,7 @@ import { RecanchaService } from '../../services/recancha.service';
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     .icon-chip.blue { background: #eff6ff; color: #2563eb; }
     .icon-chip.pink { background: #fdf2f8; color: #ec4899; }
@@ -163,7 +168,7 @@ import { RecanchaService } from '../../services/recancha.service';
     .mood-selector { 
       display: grid; 
       grid-template-columns: repeat(5, 1fr); 
-      gap: 6px; 
+      gap: clamp(3px, 1.2vw, 6px); 
       margin-bottom: 16px; 
     }
     .mood-btn { 
@@ -174,14 +179,15 @@ import { RecanchaService } from '../../services/recancha.service';
       background: #f8fafc; 
       border: 1px solid #e2e8f0; 
       border-radius: 10px; 
-      padding: 8px 2px; 
+      padding: clamp(8px, 1.8vw, 10px) 2px; 
       cursor: pointer; 
       color: #64748b;
       transition: all 0.15s ease;
+      min-height: 44px;
     }
-    .mood-icon { stroke: #64748b; }
+    .mood-icon { stroke: #64748b; width: clamp(20px, 4.5vw, 24px); height: clamp(20px, 4.5vw, 24px); }
     .mood-score { font-size: 0.72rem; font-weight: 700; }
-    .mood-label { font-size: 0.62rem; color: #94a3b8; }
+    .mood-label { font-size: clamp(0.55rem, 1.8vw, 0.62rem); color: #94a3b8; }
     
     .mood-btn:hover { background: #eff6ff; border-color: #3b82f6; }
     .mood-btn:hover .mood-icon { stroke: #2563eb; }
@@ -204,6 +210,7 @@ import { RecanchaService } from '../../services/recancha.service';
       margin-bottom: 14px; 
       background: #f8fafc;
       color: #0f172a;
+      box-sizing: border-box;
     }
     .txt-area:focus { outline: none; border-color: #2563eb; background: #fff; }
     
@@ -211,13 +218,15 @@ import { RecanchaService } from '../../services/recancha.service';
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       color: #fff; 
       border: none; 
-      padding: 10px 16px; 
+      padding: 11px 16px; 
       border-radius: 8px; 
       font-weight: 600; 
       font-size: 0.85rem;
       cursor: pointer; 
       transition: all 0.18s ease;
       margin-top: auto;
+      width: 100%;
+      min-height: 44px;
     }
     .btn-save-checkin:hover { box-shadow: 0 4px 12px rgba(236, 72, 153, 0.35); transform: translateY(-1px); }
     
@@ -230,15 +239,22 @@ import { RecanchaService } from '../../services/recancha.service';
       background: #f8fafc;
       border-radius: 10px;
       margin-bottom: 12px;
+      gap: 4px;
     }
-    .col-chart { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-    .bar-pill { width: 14px; background: linear-gradient(180deg, #ec4899 0%, #2563eb 100%); border-radius: 4px; }
+    .col-chart { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+    .bar-pill { width: clamp(8px, 2.5vw, 14px); background: linear-gradient(180deg, #ec4899 0%, #2563eb 100%); border-radius: 4px; }
     .bar-val { font-size: 0.7rem; font-weight: 700; color: #2563eb; margin-top: 4px; }
     .day-text { font-size: 0.72rem; color: #64748b; margin-top: 2px; }
     .chart-caption { font-size: 0.78rem; color: #64748b; text-align: center; }
     
-    .track-stepper { display: flex; border: 1.5px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin: 16px 0; }
-    .step { flex: 1; text-align: center; padding: 10px 6px; font-size: 0.75rem; font-weight: 700; background: #f8fafc; color: #64748b; }
+    .track-stepper { 
+      display: flex; 
+      border: 1.5px solid #e2e8f0; 
+      border-radius: 8px; 
+      overflow: hidden; 
+      margin: 16px 0; 
+    }
+    .step { flex: 1; text-align: center; padding: 10px 4px; font-size: 0.75rem; font-weight: 700; background: #f8fafc; color: #64748b; }
     .step.done { background: #eff6ff; color: #2563eb; }
     .step.cur { background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); color: #ffffff; }
     
@@ -247,11 +263,28 @@ import { RecanchaService } from '../../services/recancha.service';
     .bar-shell { background: #f1f5f9; height: 10px; border-radius: 6px; overflow: hidden; }
     .bar-fill { background: linear-gradient(90deg, #2563eb 0%, #ec4899 100%); height: 100%; border-radius: 6px; }
     
-    .metas-card { margin-top: 24px; max-width: 640px; }
+    .metas-card { margin-top: 24px; width: 100%; }
     .task-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
     .task-list li { display: flex; gap: 12px; font-size: 0.88rem; align-items: center; color: #334155; }
     .task-list li.completed label { text-decoration: line-through; color: #94a3b8; }
-    .custom-chk { width: 18px; height: 18px; accent-color: #ec4899; cursor: pointer; }
+    .custom-chk { width: 20px; height: 20px; accent-color: #ec4899; cursor: pointer; flex-shrink: 0; }
+
+    @media (max-width: 480px) {
+      .mood-label {
+        display: none;
+      }
+      .track-stepper {
+        flex-direction: column;
+      }
+      .step {
+        padding: 8px 10px;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .step:last-child {
+        border-bottom: none;
+      }
+    }
   `]
 })
 export class SeguimientoComponent {

@@ -213,7 +213,7 @@ import { FirebaseService } from '../../services/firebase.service';
               <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path>
               <line x1="22" y1="2" x2="2" y2="22"></line>
             </svg>
-            <span>Finalizar sesión</span>
+            <span class="btn-hangup-text">Finalizar sesión</span>
           </button>
         </footer>
       </div>
@@ -229,35 +229,39 @@ import { FirebaseService } from '../../services/firebase.service';
       align-items: center; 
       justify-content: center; 
       z-index: 3000; 
-      padding: 16px;
+      padding: clamp(0px, 2vw, 16px);
     }
     
     .video-shell { 
       background: #090f20; 
       border-radius: 18px; 
       width: 100%; 
-      max-width: 940px; 
+      max-width: 960px; 
       color: #fff; 
       overflow: hidden; 
       border: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(37, 99, 235, 0.2);
-      display: flex;
+      display: flex; 
       flex-direction: column;
+      max-height: 94vh;
+      max-height: 94dvh;
     }
     
     .top-bar { 
-      padding: 16px 24px; 
+      padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 24px); 
       background: #111c38; 
       display: flex; 
       justify-content: space-between; 
       align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 10px;
     }
     
     .session-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
     
     .pulse-indicator {
@@ -267,6 +271,7 @@ import { FirebaseService } from '../../services/firebase.service';
       background: #ec4899;
       box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.35);
       animation: pulsePink 1.8s infinite;
+      flex-shrink: 0;
     }
     @keyframes pulsePink {
       0% { transform: scale(0.95); opacity: 0.8; }
@@ -276,8 +281,11 @@ import { FirebaseService } from '../../services/firebase.service';
     
     .session-title { 
       font-weight: 700; 
-      font-size: 0.95rem; 
+      font-size: clamp(0.82rem, 2vw, 0.95rem); 
       color: #ffffff; 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .session-secure {
@@ -290,39 +298,42 @@ import { FirebaseService } from '../../services/firebase.service';
       padding: 3px 8px;
       border-radius: 6px;
       border: 1px solid rgba(56, 189, 248, 0.25);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     
     .timer-red { 
       color: #f43f5e; 
       font-family: 'JetBrains Mono', monospace; 
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
       background: rgba(244, 63, 94, 0.12);
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
       border: 1px solid rgba(244, 63, 94, 0.25);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     
     .streams-container {
       display: flex;
       background: #060b18;
-      min-height: 420px;
+      flex: 1;
+      min-height: 320px;
+      position: relative;
+      overflow: hidden;
     }
     
     .video-grid { 
       flex: 1;
       display: grid; 
       grid-template-columns: 1fr 1fr; 
-      gap: 16px; 
-      padding: 20px; 
-    }
-    
-    @media (max-width: 768px) {
-      .video-grid { grid-template-columns: 1fr; }
+      gap: clamp(8px, 1.5vw, 16px); 
+      padding: clamp(10px, 2vw, 20px); 
     }
     
     .stream-box { 
-      min-height: 280px; 
+      min-height: 180px; 
       background: #111a2e; 
       border-radius: 14px; 
       display: flex; 
@@ -347,17 +358,19 @@ import { FirebaseService } from '../../services/firebase.service';
       flex-direction: column;
       align-items: center;
       gap: 12px;
+      padding: 12px;
+      text-align: center;
     }
     
     .circle-avatar-feed { 
-      width: 72px; 
-      height: 72px; 
+      width: clamp(52px, 12vw, 72px); 
+      height: clamp(52px, 12vw, 72px); 
       border-radius: 50%; 
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      font-size: 1.5rem; 
+      font-size: clamp(1.1rem, 3vw, 1.5rem); 
       font-weight: 800; 
       color: #fff;
       box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
@@ -367,26 +380,30 @@ import { FirebaseService } from '../../services/firebase.service';
       background: linear-gradient(135deg, #db2777 0%, #3b82f6 100%);
     }
     
-    .status-feed { font-size: 0.78rem; color: #94a3b8; }
+    .status-feed { font-size: 0.76rem; color: #94a3b8; }
     
     .remote-meta-box { text-align: center; }
-    .remote-name { display: block; font-size: 1rem; font-weight: 700; color: #fff; }
-    .remote-sub { display: block; font-size: 0.75rem; color: #38bdf8; margin-top: 2px; }
+    .remote-name { display: block; font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .remote-sub { display: block; font-size: 0.72rem; color: #38bdf8; margin-top: 2px; }
     
     .participant-badge { 
       position: absolute; 
-      bottom: 12px; 
-      left: 14px; 
-      font-size: 0.78rem; 
+      bottom: clamp(6px, 1.5vw, 12px); 
+      left: clamp(8px, 1.5vw, 14px); 
+      font-size: 0.74rem; 
       font-weight: 600;
-      background: rgba(5, 11, 26, 0.8); 
+      background: rgba(5, 11, 26, 0.85); 
       backdrop-filter: blur(8px);
-      padding: 5px 12px; 
+      padding: 4px 10px; 
       border-radius: 8px; 
       border: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; 
+      align-items: center; 
+      gap: 6px;
+      max-width: calc(100% - 20px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .audio-wave {
@@ -394,6 +411,7 @@ import { FirebaseService } from '../../services/firebase.service';
       align-items: flex-end;
       gap: 2px;
       height: 12px;
+      flex-shrink: 0;
     }
     .audio-wave span {
       width: 2.5px;
@@ -424,17 +442,17 @@ import { FirebaseService } from '../../services/firebase.service';
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 24px 20px;
+      padding: clamp(14px, 3vw, 24px) clamp(10px, 2.5vw, 20px);
       max-width: 340px;
     }
     .radar-box {
       position: relative;
-      width: 68px;
-      height: 68px;
+      width: clamp(52px, 10vw, 68px);
+      height: clamp(52px, 10vw, 68px);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .radar-ring {
       position: absolute;
@@ -448,8 +466,8 @@ import { FirebaseService } from '../../services/firebase.service';
       100% { transform: scale(1.4); opacity: 0; }
     }
     .radar-center {
-      width: 44px;
-      height: 44px;
+      width: clamp(36px, 8vw, 44px);
+      height: clamp(36px, 8vw, 44px);
       border-radius: 50%;
       background: rgba(37, 99, 235, 0.2);
       border: 1.5px solid #38bdf8;
@@ -459,16 +477,16 @@ import { FirebaseService } from '../../services/firebase.service';
       justify-content: center;
     }
     .waiting-title {
-      font-size: 0.95rem;
+      font-size: clamp(0.85rem, 2.2vw, 0.95rem);
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 6px;
     }
     .waiting-desc {
-      font-size: 0.78rem;
+      font-size: clamp(0.72rem, 1.8vw, 0.78rem);
       color: #94a3b8;
       line-height: 1.45;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .room-id-tag {
       display: inline-flex;
@@ -477,11 +495,12 @@ import { FirebaseService } from '../../services/firebase.service';
       background: rgba(245, 158, 11, 0.12);
       border: 1px solid rgba(245, 158, 11, 0.3);
       color: #fbbf24;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      max-width: 100%;
     }
     .dot-amber {
       width: 6px;
@@ -489,20 +508,22 @@ import { FirebaseService } from '../../services/firebase.service';
       border-radius: 50%;
       background: #f59e0b;
       box-shadow: 0 0 6px #f59e0b;
+      flex-shrink: 0;
     }
     .btn-copy-room-link {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.18);
       color: #e2e8f0;
-      padding: 7px 14px;
+      padding: 7px 12px;
       border-radius: 8px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: all 0.15s ease;
+      min-height: 36px;
     }
     .btn-copy-room-link:hover {
       background: rgba(255, 255, 255, 0.16);
@@ -515,13 +536,14 @@ import { FirebaseService } from '../../services/firebase.service';
       width: 300px; 
       background: #0f172a; 
       border-left: 1px solid rgba(255, 255, 255, 0.08); 
-      padding: 20px; 
+      padding: 18px; 
       display: flex; 
       flex-direction: column; 
+      z-index: 25;
     }
     .notes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .notes-header h4 { font-size: 0.9rem; font-weight: 700; color: #fff; margin: 0; }
-    .btn-close-notes { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+    .btn-close-notes { background: none; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; padding: 4px; }
     .notes-textarea { 
       flex: 1; 
       background: #1e293b; 
@@ -539,29 +561,31 @@ import { FirebaseService } from '../../services/firebase.service';
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       color: #fff; 
       border: none; 
-      padding: 9px; 
+      padding: 10px; 
       border-radius: 6px; 
       font-weight: 600; 
       font-size: 0.82rem; 
       cursor: pointer; 
       transition: all 0.15s ease;
+      min-height: 40px;
     }
     .btn-save-note:hover { opacity: 0.9; }
 
     /* Controles de Llamada */
     .call-controls-bar { 
-      padding: 16px 24px; 
+      padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 24px); 
       background: #111c38; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      gap: 14px; 
+      gap: clamp(8px, 1.8vw, 14px); 
       border-top: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
     }
     
     .control-btn { 
-      width: 48px; 
-      height: 48px; 
+      width: clamp(42px, 9vw, 48px); 
+      height: clamp(42px, 9vw, 48px); 
       border-radius: 12px; 
       background: #1e293b; 
       border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -571,6 +595,7 @@ import { FirebaseService } from '../../services/firebase.service';
       justify-content: center; 
       cursor: pointer; 
       transition: all 0.18s ease;
+      flex-shrink: 0;
     }
     .control-btn:hover { background: #334155; transform: translateY(-2px); }
     .control-btn.off { background: #e11d48; border-color: #f43f5e; color: #fff; }
@@ -580,22 +605,87 @@ import { FirebaseService } from '../../services/firebase.service';
       background: #e11d48; 
       color: #ffffff; 
       border: none; 
-      padding: 0 22px; 
-      height: 48px; 
+      padding: 0 clamp(12px, 3vw, 22px); 
+      height: clamp(42px, 9vw, 48px); 
       border-radius: 12px; 
       font-weight: 700; 
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer; 
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center;
+      gap: 8px;
       box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
       transition: all 0.18s ease;
+      flex-shrink: 0;
     }
     .btn-hang-up:hover {
       background: #be123c;
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(225, 29, 72, 0.45);
+    }
+
+    /* ================= BREAKPOINTS RESPONSIVOS VIDEOLLAMADA ================= */
+    @media (max-width: 768px) {
+      .video-modal-bg {
+        padding: 0;
+      }
+      .video-shell {
+        border-radius: 0;
+        border: none;
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100dvh;
+      }
+      .video-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        padding: 8px;
+        gap: 8px;
+      }
+      .clinical-notes-panel {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: min(340px, 90vw);
+        box-shadow: -6px 0 25px rgba(0, 0, 0, 0.7);
+      }
+      .session-secure span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .btn-hangup-text {
+        display: none;
+      }
+      .btn-hang-up {
+        width: clamp(42px, 9vw, 48px);
+        padding: 0;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .video-shell {
+        border-radius: 0;
+        height: 100dvh;
+        max-height: 100dvh;
+      }
+      .top-bar {
+        padding: 6px 14px;
+      }
+      .call-controls-bar {
+        padding: 6px 14px;
+      }
+      .video-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+      }
+      .control-btn, .btn-hang-up {
+        height: 38px;
+        width: 38px;
+      }
     }
   `]
 })

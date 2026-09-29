@@ -89,8 +89,8 @@ import { RecanchaService } from '../../services/recancha.service';
     </div>
   `,
   styles: [`
-    .head h2 { font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .head p { color: #64748b; font-size: 0.92rem; margin-top: 4px; margin-bottom: 26px; }
+    .head h2 { font-size: clamp(1.35rem, 4vw, 1.7rem); font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .head p { color: #64748b; font-size: clamp(0.82rem, 2.2vw, 0.92rem); margin-top: 4px; margin-bottom: 22px; line-height: 1.45; }
     
     .sessions-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
     
@@ -98,12 +98,13 @@ import { RecanchaService } from '../../services/recancha.service';
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      padding: 20px 24px; 
+      padding: clamp(16px, 3vw, 20px) clamp(16px, 3.5vw, 24px); 
       background: #ffffff; 
       border-radius: 14px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       transition: all 0.2s ease;
+      gap: 16px;
     }
     .session-card-row:hover {
       box-shadow: 0 6px 16px -2px rgba(37, 99, 235, 0.1);
@@ -123,26 +124,28 @@ import { RecanchaService } from '../../services/recancha.service';
       margin-bottom: 6px;
     }
     
-    .left-info h4 { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
-    .meta-row { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; }
-    .meta-row svg { color: #ec4899; }
+    .left-info h4 { font-size: clamp(1.05rem, 2.5vw, 1.15rem); font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    .meta-row { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; flex-wrap: wrap; }
+    .meta-row svg { color: #ec4899; flex-shrink: 0; }
     
-    .right-buttons { display: flex; align-items: center; gap: 10px; }
+    .right-buttons { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     
     .btn-primary-action { 
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       color: #ffffff; 
       border: none; 
-      padding: 10px 18px; 
+      padding: 11px 18px; 
       border-radius: 8px; 
       font-weight: 600; 
       cursor: pointer; 
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-size: 0.86rem;
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
       transition: all 0.2s ease;
+      min-height: 44px;
     }
     .btn-primary-action:hover {
       transform: translateY(-1px);
@@ -152,19 +155,23 @@ import { RecanchaService } from '../../services/recancha.service';
     .btn-outline-cancel { 
       background: #ffffff; 
       border: 1px solid #cbd5e1; 
-      padding: 10px 16px; 
+      padding: 11px 16px; 
       border-radius: 8px; 
       cursor: pointer; 
       color: #64748b; 
       font-size: 0.86rem;
       font-weight: 600;
       transition: all 0.15s ease;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .btn-outline-cancel:hover { background: #f8fafc; color: #e11d48; border-color: #fecdd3; }
     
     .form-card { 
       background: #ffffff; 
-      padding: 26px; 
+      padding: clamp(18px, 3.5vw, 26px); 
       border-radius: 14px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -176,25 +183,50 @@ import { RecanchaService } from '../../services/recancha.service';
       color: #2563eb;
       padding: 8px;
       border-radius: 10px;
+      flex-shrink: 0;
     }
-    .form-card h3 { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
+    .form-card h3 { font-size: clamp(1.05rem, 2.5vw, 1.15rem); font-weight: 800; color: #0f172a; margin-bottom: 2px; }
     .sub-form { font-size: 0.84rem; color: #64748b; }
     
-    .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 20px; }
+    .grid-form { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); 
+      gap: clamp(14px, 2.5vw, 18px); 
+      margin-bottom: 20px; 
+    }
     .grid-form label { display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 6px; }
     .inp-ctrl { 
       width: 100%; 
-      padding: 10px 14px; 
+      padding: 11px 14px; 
       border: 1.5px solid #e2e8f0; 
       border-radius: 8px; 
       font-size: 0.88rem; 
       color: #0f172a; 
       background: #f8fafc;
       transition: all 0.15s ease;
+      box-sizing: border-box;
+      min-height: 44px;
     }
     .inp-ctrl:focus { outline: none; border-color: #2563eb; background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
     
-    .submit-btn { width: fit-content; padding: 12px 24px; }
+    .submit-btn { width: fit-content; padding: 12px 24px; min-height: 44px; }
+
+    @media (max-width: 768px) {
+      .session-card-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .right-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn-primary-action, .btn-outline-cancel {
+        width: 100%;
+      }
+      .submit-btn {
+        width: 100%;
+      }
+    }
   `]
 })
 export class SesionesComponent {

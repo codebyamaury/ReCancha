@@ -263,6 +263,7 @@ interface SeparatedParticle {
     .login-viewport {
       position: relative;
       min-height: 100vh;
+      min-height: 100dvh;
       width: 100%;
       /* Gradientes CSS de fondo estáticos con tonos profundos para contraste de malla 3D */
       background: 
@@ -272,8 +273,10 @@ interface SeparatedParticle {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
-      overflow: hidden;
+      padding: clamp(16px, 4vw, 36px) clamp(12px, 3vw, 24px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
     }
 
     /* Canvas de Malla 3D Geométrica (Plexus/Wireframe) */
@@ -293,7 +296,8 @@ interface SeparatedParticle {
       z-index: 100 !important;
       pointer-events: auto !important;
       width: 100%;
-      max-width: 450px;
+      max-width: 460px;
+      margin: auto;
     }
 
     .card-login {
@@ -301,8 +305,8 @@ interface SeparatedParticle {
       z-index: 101 !important;
       pointer-events: auto !important;
       background: rgba(255, 255, 255, 0.98);
-      border-radius: 20px;
-      padding: 36px 30px;
+      border-radius: clamp(16px, 4vw, 22px);
+      padding: clamp(24px, 5vw, 36px) clamp(18px, 4.5vw, 32px);
       border: 1px solid rgba(255, 255, 255, 0.85);
       box-shadow: 
         0 15px 35px -5px rgba(5, 11, 26, 0.6),
@@ -349,10 +353,10 @@ interface SeparatedParticle {
     }
 
     .logo-title {
-      font-size: 2.1rem;
+      font-size: clamp(1.65rem, 5vw, 2.1rem);
       font-weight: 900;
       letter-spacing: -0.03em;
-      line-height: 1.1;
+      line-height: 1.15;
       color: #0f172a;
       display: flex;
       align-items: baseline;
@@ -371,7 +375,7 @@ interface SeparatedParticle {
 
     .logo-subtitle {
       color: #64748b;
-      font-size: 0.85rem;
+      font-size: clamp(0.78rem, 2.2vw, 0.85rem);
       line-height: 1.45;
       margin-top: 6px;
     }
@@ -766,6 +770,7 @@ interface SeparatedParticle {
       font-weight: 700;
       color: #475569;
       margin-bottom: 4px;
+      flex-wrap: wrap;
     }
 
     .badge-sep {
@@ -776,6 +781,41 @@ interface SeparatedParticle {
       font-size: 0.7rem;
       color: #94a3b8;
       line-height: 1.4;
+    }
+
+    /* ================= BREAKPOINTS RESPONSIVOS LOGIN ================= */
+    @media (max-width: 480px) {
+      .card-login {
+        padding: 24px 18px;
+        border-radius: 16px;
+      }
+      .brand-badge-pill {
+        font-size: 0.62rem;
+        padding: 3px 8px;
+        letter-spacing: 0.05em;
+      }
+      .pill-btn {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+      }
+      .feature-info-card {
+        padding: 11px 12px;
+        font-size: 0.78rem;
+        gap: 9px;
+      }
+      .btn-gradient-submit {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card-login {
+        padding: 20px 14px;
+      }
+      .tab-svg {
+        display: none;
+      }
     }
   `]
 })

@@ -98,13 +98,17 @@ import { RecanchaService } from '../../services/recancha.service';
     </div>
   `,
   styles: [`
-    .head h2 { font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .head p { color: #64748b; font-size: 0.92rem; margin-top: 4px; margin-bottom: 26px; }
+    .head h2 { font-size: clamp(1.35rem, 4vw, 1.7rem); font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .head p { color: #64748b; font-size: clamp(0.82rem, 2.2vw, 0.92rem); margin-top: 4px; margin-bottom: 22px; line-height: 1.45; }
     
-    .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .grid-stats { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); 
+      gap: clamp(14px, 2.5vw, 20px); 
+    }
     .stat-card { 
       background: #ffffff; 
-      padding: 26px; 
+      padding: clamp(18px, 3.5vw, 26px); 
       border-radius: 16px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -114,7 +118,7 @@ import { RecanchaService } from '../../services/recancha.service';
     
     .warning-card { border-left: 4px solid #ec4899; }
     
-    .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
     .stat-card h3 { font-size: 0.95rem; font-weight: 700; color: #475569; margin: 0; }
     
     .icon-chip {
@@ -124,12 +128,13 @@ import { RecanchaService } from '../../services/recancha.service';
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     .icon-chip.blue { background: #eff6ff; color: #2563eb; }
     .icon-chip.pink { background: #fdf2f8; color: #ec4899; }
     .icon-chip.purple { background: #faf5ff; color: #9333ea; }
     
-    .big-num { font-size: 2.8rem; font-weight: 800; line-height: 1; margin: 14px 0 8px 0; }
+    .big-num { font-size: clamp(2.2rem, 6vw, 2.8rem); font-weight: 800; line-height: 1; margin: 14px 0 8px 0; }
     .text-blue { color: #2563eb; }
     .text-pink { color: #ec4899; }
     
@@ -139,7 +144,7 @@ import { RecanchaService } from '../../services/recancha.service';
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       color: #ffffff; 
       border: none; 
-      padding: 10px 16px; 
+      padding: 11px 16px; 
       border-radius: 8px; 
       font-weight: 600; 
       font-size: 0.82rem;
@@ -147,10 +152,12 @@ import { RecanchaService } from '../../services/recancha.service';
       margin-top: 18px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       width: fit-content;
       box-shadow: 0 4px 10px rgba(236, 72, 153, 0.25);
       transition: all 0.2s ease;
+      min-height: 44px;
     }
     .btn-stat-action:hover {
       box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35);
@@ -161,7 +168,7 @@ import { RecanchaService } from '../../services/recancha.service';
       background: #eff6ff;
       color: #2563eb;
       border: 1px solid #bfdbfe;
-      padding: 8px 14px;
+      padding: 10px 14px;
       border-radius: 8px;
       font-weight: 600;
       font-size: 0.82rem;
@@ -169,9 +176,11 @@ import { RecanchaService } from '../../services/recancha.service';
       margin-top: 18px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       width: fit-content;
       transition: all 0.15s ease;
+      min-height: 44px;
     }
     .btn-stat-link:hover { background: #dbeafe; }
     
@@ -184,6 +193,7 @@ import { RecanchaService } from '../../services/recancha.service';
       background: #f8fafc; 
       border: 1px solid #e2e8f0; 
       border-radius: 10px; 
+      gap: 8px;
     }
     .session-item-info strong { display: block; font-size: 0.86rem; color: #0f172a; font-weight: 700; }
     .session-item-info span { font-size: 0.78rem; color: #64748b; margin-top: 2px; display: block; }
@@ -192,7 +202,7 @@ import { RecanchaService } from '../../services/recancha.service';
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%);
       color: #ffffff;
       border: none;
-      padding: 6px 12px;
+      padding: 8px 12px;
       border-radius: 6px;
       font-size: 0.76rem;
       font-weight: 700;
@@ -202,6 +212,8 @@ import { RecanchaService } from '../../services/recancha.service';
       gap: 5px;
       box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
       transition: all 0.15s ease;
+      flex-shrink: 0;
+      min-height: 36px;
     }
     .btn-mini-call:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.35); }
 
@@ -213,10 +225,19 @@ import { RecanchaService } from '../../services/recancha.service';
       font-size: 0.82rem;
       cursor: pointer;
       text-align: left;
-      padding: 10px 0 0 0;
+      padding: 12px 0 0 0;
       margin-top: auto;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
     }
     .btn-view-all-sessions:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      .btn-stat-action, .btn-stat-link {
+        width: 100%;
+      }
+    }
   `]
 })
 export class InicioPsicologaComponent {

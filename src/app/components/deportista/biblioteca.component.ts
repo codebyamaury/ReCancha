@@ -58,20 +58,33 @@ import { RecursoBiblioteca } from '../../models/recancha.models';
     </div>
   `,
   styles: [`
-    .head h2 { font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .head p { color: #64748b; font-size: 0.92rem; margin-top: 4px; margin-bottom: 26px; max-width: 760px; line-height: 1.5; }
+    .head h2 { font-size: clamp(1.35rem, 4vw, 1.7rem); font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .head p { color: #64748b; font-size: clamp(0.82rem, 2.2vw, 0.92rem); margin-top: 4px; margin-bottom: 22px; max-width: 760px; line-height: 1.5; }
     
-    .filters { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .filters { 
+      display: flex; 
+      gap: 8px; 
+      margin-bottom: 24px; 
+      overflow-x: auto; 
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+
     .pill { 
       background: #ffffff; 
       border: 1.5px solid #e2e8f0; 
-      padding: 7px 18px; 
+      padding: 8px 18px; 
       border-radius: 20px; 
       cursor: pointer; 
       font-size: 0.85rem; 
       font-weight: 600; 
       color: #475569;
       transition: all 0.15s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-height: 38px;
     }
     .pill:hover { border-color: #cbd5e1; background: #f8fafc; }
     .pill.active { 
@@ -81,12 +94,16 @@ import { RecursoBiblioteca } from '../../models/recancha.models';
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
     }
     
-    .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; }
+    .lib-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); 
+      gap: clamp(14px, 2.5vw, 20px); 
+    }
     .lib-card { 
       background: #ffffff; 
       border: 1px solid #e2e8f0; 
       border-radius: 14px; 
-      padding: 24px; 
+      padding: clamp(18px, 3.5vw, 24px); 
       display: flex; 
       flex-direction: column; 
       justify-content: space-between; 
@@ -127,24 +144,27 @@ import { RecursoBiblioteca } from '../../models/recancha.models';
     }
     .time svg { color: #ec4899; }
     
-    .lib-card h4 { font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.35; }
-    .lib-card p { font-size: 0.86rem; color: #475569; line-height: 1.5; margin-bottom: 22px; flex: 1; }
+    .lib-card h4 { font-size: clamp(1.02rem, 2.8vw, 1.12rem); font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.35; }
+    .lib-card p { font-size: 0.86rem; color: #475569; line-height: 1.5; margin-bottom: 20px; flex: 1; }
     
     .card-footer { margin-top: auto; }
     .btn-primary-action { 
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       color: #ffffff; 
       border: none; 
-      padding: 10px 18px; 
+      padding: 11px 18px; 
       border-radius: 8px; 
       font-weight: 600; 
       font-size: 0.85rem; 
       cursor: pointer; 
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 7px;
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
       transition: all 0.2s ease;
+      width: 100%;
+      min-height: 44px;
     }
     .btn-primary-action:hover {
       box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35);

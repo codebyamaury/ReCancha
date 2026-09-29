@@ -86,14 +86,19 @@ import { RecanchaService } from '../../services/recancha.service';
     </div>
   `,
   styles: [`
-    .title-head h2 { font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .title-head p { color: #64748b; font-size: 0.92rem; margin-top: 4px; margin-bottom: 26px; }
+    .title-head h2 { font-size: clamp(1.35rem, 4vw, 1.7rem); font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .title-head p { color: #64748b; font-size: clamp(0.82rem, 2.2vw, 0.92rem); margin-top: 4px; margin-bottom: 22px; line-height: 1.45; }
     
-    .dashboard-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; margin-bottom: 24px; }
+    .dashboard-row { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); 
+      gap: clamp(14px, 2.5vw, 20px); 
+      margin-bottom: 24px; 
+    }
     
     .box-card { 
       background: #ffffff; 
-      padding: 24px; 
+      padding: clamp(18px, 3.5vw, 24px); 
       border-radius: 14px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -121,15 +126,15 @@ import { RecanchaService } from '../../services/recancha.service';
     }
 
     .box-card h3 { font-size: 0.98rem; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
-    .session-name { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .session-name { font-size: clamp(1.1rem, 3vw, 1.25rem); font-weight: 800; color: #0f172a; margin-bottom: 4px; }
     .session-meta { font-size: 0.84rem; color: #64748b; margin-bottom: 20px; line-height: 1.45; }
     
     .btn-action { 
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       color: #ffffff; 
       border: none; 
-      padding: 11px 18px; 
-      border-radius: 8px; 
+      padding: 12px 18px; 
+      border-radius: 10px; 
       font-weight: 600; 
       cursor: pointer; 
       font-size: 0.88rem; 
@@ -140,6 +145,8 @@ import { RecanchaService } from '../../services/recancha.service';
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
       transition: all 0.2s ease;
       margin-top: auto;
+      width: 100%;
+      min-height: 44px;
     }
     .btn-action:hover {
       box-shadow: 0 6px 16px rgba(236, 72, 153, 0.35);
@@ -151,25 +158,26 @@ import { RecanchaService } from '../../services/recancha.service';
     .mood-selector { 
       display: grid; 
       grid-template-columns: repeat(5, 1fr); 
-      gap: 6px; 
+      gap: clamp(3px, 1.2vw, 6px); 
       margin: 12px 0 6px 0; 
     }
     .mood-btn { 
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       background: #f8fafc; 
       border: 1px solid #e2e8f0; 
       border-radius: 10px; 
-      padding: 10px 4px; 
+      padding: clamp(8px, 2vw, 10px) 2px; 
       cursor: pointer; 
       color: #64748b;
       transition: all 0.18s ease; 
+      min-height: 44px;
     }
-    .mood-icon { stroke: #64748b; }
+    .mood-icon { stroke: #64748b; width: clamp(20px, 5vw, 26px); height: clamp(20px, 5vw, 26px); }
     .mood-score { font-size: 0.72rem; font-weight: 700; }
-    .mood-label { font-size: 0.65rem; color: #94a3b8; }
+    .mood-label { font-size: clamp(0.55rem, 1.8vw, 0.65rem); color: #94a3b8; text-align: center; }
     
     .mood-btn:hover { 
       background: #eff6ff; 
@@ -206,12 +214,13 @@ import { RecanchaService } from '../../services/recancha.service';
       gap: 6px;
       margin-top: auto;
       transition: color 0.15s ease;
+      min-height: 40px;
     }
     .link-action:hover { color: #ec4899; }
     
     .quote-card { 
       background: linear-gradient(135deg, #eff6ff 0%, #fdf2f8 100%); 
-      padding: 22px 24px; 
+      padding: clamp(16px, 3.5vw, 24px); 
       border-radius: 14px; 
       border: 1px solid #dbeafe; 
       border-left: 4px solid #ec4899; 
@@ -228,7 +237,17 @@ import { RecanchaService } from '../../services/recancha.service';
       flex-shrink: 0;
     }
     .quote-card h4 { font-size: 0.82rem; text-transform: uppercase; color: #2563eb; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 6px; }
-    .quote-card p { font-size: 0.92rem; color: #1e293b; line-height: 1.5; }
+    .quote-card p { font-size: clamp(0.85rem, 2.2vw, 0.92rem); color: #1e293b; line-height: 1.5; }
+
+    @media (max-width: 480px) {
+      .quote-card {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .mood-label {
+        display: none;
+      }
+    }
   `]
 })
 export class InicioComponent { 

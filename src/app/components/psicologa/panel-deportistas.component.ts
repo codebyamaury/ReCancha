@@ -164,21 +164,22 @@ import { DeportistaClinica } from '../../models/recancha.models';
     </div>
   `,
   styles: [`
-    .head h2 { font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .head p { color: #64748b; font-size: 0.92rem; margin-top: 4px; margin-bottom: 26px; line-height: 1.5; }
+    .head h2 { font-size: clamp(1.35rem, 4vw, 1.7rem); font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .head p { color: #64748b; font-size: clamp(0.82rem, 2.2vw, 0.92rem); margin-top: 4px; margin-bottom: 22px; line-height: 1.5; }
     
     .table-container {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
       margin-bottom: 26px;
     }
 
-    .table-athletes { width: 100%; border-collapse: collapse; min-width: 680px; }
-    .table-athletes th, .table-athletes td { padding: 16px 20px; text-align: left; font-size: 0.88rem; border-bottom: 1px solid #f1f5f9; }
-    .table-athletes th { background: #f8fafc; font-weight: 700; color: #475569; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .table-athletes { width: 100%; border-collapse: collapse; min-width: 640px; }
+    .table-athletes th, .table-athletes td { padding: 14px 16px; text-align: left; font-size: 0.88rem; border-bottom: 1px solid #f1f5f9; }
+    .table-athletes th { background: #f8fafc; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .table-athletes tr { cursor: pointer; transition: all 0.15s ease; }
     .table-athletes tr:hover { background: #f8fafc; }
     .table-athletes tr.active-row { 
@@ -186,10 +187,10 @@ import { DeportistaClinica } from '../../models/recancha.models';
       border-left: 4px solid #2563eb; 
     }
     
-    .athlete-cell { display: flex; align-items: center; gap: 12px; }
+    .athlete-cell { display: flex; align-items: center; gap: 10px; }
     .table-avatar {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%);
       color: #ffffff;
@@ -197,56 +198,60 @@ import { DeportistaClinica } from '../../models/recancha.models';
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       flex-shrink: 0;
     }
-    .bold-name { font-weight: 700; color: #0f172a; display: block; }
-    .athlete-sub { font-size: 0.76rem; color: #64748b; }
+    .bold-name { font-weight: 700; color: #0f172a; display: block; font-size: 0.88rem; }
+    .athlete-sub { font-size: 0.74rem; color: #64748b; }
     
     .injury-tag {
       background: #f1f5f9;
       color: #334155;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 500;
+      white-space: nowrap;
     }
 
     .mood-rating-cell { display: flex; align-items: center; gap: 6px; }
     .mood-val { font-weight: 700; color: #0f172a; }
 
     .prog-cell { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 600; color: #475569; }
-    .mini-bar { width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+    .mini-bar { width: 50px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
     .mini-fill { height: 100%; background: linear-gradient(90deg, #2563eb 0%, #ec4899 100%); }
 
     .chip { 
-      padding: 4px 12px; 
+      padding: 4px 10px; 
       border-radius: 20px; 
-      font-size: 0.75rem; 
+      font-size: 0.72rem; 
       font-weight: 700; 
       background: #eff6ff; 
       color: #2563eb; 
       display: inline-block;
+      white-space: nowrap;
     }
     .chip.danger { background: #fdf2f8; color: #ec4899; }
     
     .btn-table-view {
       background: #ffffff;
       border: 1px solid #cbd5e1;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 6px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: #2563eb;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.15s ease;
+      min-height: 34px;
     }
     .btn-table-view:hover { background: #eff6ff; border-color: #93c5fd; }
 
     /* Caja de Detalle */
     .detail-box { 
       background: #ffffff; 
-      padding: 28px; 
+      padding: clamp(16px, 3.5vw, 28px); 
       border-radius: 16px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
@@ -263,24 +268,25 @@ import { DeportistaClinica } from '../../models/recancha.models';
       padding-bottom: 20px;
     }
 
-    .athlete-profile-header { display: flex; align-items: center; gap: 16px; }
+    .athlete-profile-header { display: flex; align-items: center; gap: 14px; }
     .profile-avatar-lg {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%);
       color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+      flex-shrink: 0;
     }
-    .detail-top h3 { font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0; }
-    .lesion-p { font-size: 0.88rem; color: #64748b; margin-top: 4px; }
+    .detail-top h3 { font-size: clamp(1.15rem, 3vw, 1.35rem); font-weight: 800; color: #0f172a; margin: 0; }
+    .lesion-p { font-size: 0.86rem; color: #64748b; margin-top: 4px; }
 
-    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .top-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
     .next-time-box {
       text-align: right;
       font-size: 0.85rem;
@@ -292,16 +298,18 @@ import { DeportistaClinica } from '../../models/recancha.models';
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%);
       color: #ffffff;
       border: none;
-      padding: 10px 18px;
+      padding: 11px 18px;
       border-radius: 8px;
       font-weight: 700;
       font-size: 0.86rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
       transition: all 0.2s ease;
+      min-height: 44px;
     }
     .btn-start-call:hover {
       box-shadow: 0 6px 16px rgba(236, 72, 153, 0.35);
@@ -320,6 +328,7 @@ import { DeportistaClinica } from '../../models/recancha.models';
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     .icon-chip.pink { background: #fdf2f8; color: #ec4899; }
     .icon-chip.blue { background: #eff6ff; color: #2563eb; }
@@ -331,19 +340,22 @@ import { DeportistaClinica } from '../../models/recancha.models';
       justify-content: space-around; 
       background: #f8fafc; 
       border-radius: 12px; 
-      padding: 20px 16px 14px 16px; 
+      padding: 20px clamp(8px, 2vw, 16px) 14px clamp(8px, 2vw, 16px); 
       border: 1px solid #e2e8f0;
+      gap: 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    .point-col { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .point-col { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 36px; }
     .score-label { font-size: 0.72rem; font-weight: 700; color: #64748b; }
     .pillar { 
-      width: 22px; 
+      width: clamp(14px, 3vw, 22px); 
       background: linear-gradient(180deg, #ec4899 0%, #2563eb 100%); 
       border-radius: 6px; 
       transition: height 0.3s ease;
       box-shadow: 0 2px 6px rgba(236, 72, 153, 0.2);
     }
-    .day-code { font-size: 0.75rem; color: #64748b; font-weight: 600; }
+    .day-code { font-size: 0.72rem; color: #64748b; font-weight: 600; }
 
     /* Sección de Notas Clínicas */
     .clinical-notes-section { border-top: 1px solid #f1f5f9; padding-top: 22px; }
@@ -370,17 +382,19 @@ import { DeportistaClinica } from '../../models/recancha.models';
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%);
       color: #ffffff;
       border: none;
-      padding: 9px 18px;
+      padding: 11px 18px;
       border-radius: 8px;
       font-weight: 600;
       font-size: 0.84rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 7px;
       margin-top: 10px;
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
       transition: all 0.15s ease;
+      min-height: 44px;
     }
     .btn-save-note:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35); }
 
@@ -392,11 +406,31 @@ import { DeportistaClinica } from '../../models/recancha.models';
       border-radius: 8px;
       padding: 14px 18px;
     }
-    .note-meta { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; }
+    .note-meta { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
     .note-meta strong { color: #1e3a8a; }
     .note-meta span { color: #64748b; }
     .note-text { font-size: 0.86rem; color: #334155; line-height: 1.5; margin: 0; }
     .empty-notes { color: #94a3b8; font-size: 0.85rem; font-style: italic; padding: 8px 0; }
+
+    @media (max-width: 768px) {
+      .detail-top {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .top-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .next-time-box {
+        text-align: left;
+      }
+      .btn-start-call {
+        width: 100%;
+      }
+      .btn-save-note {
+        width: 100%;
+      }
+    }
   `]
 })
 export class PanelDeportistasComponent {

@@ -125,24 +125,26 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       align-items: center; 
       justify-content: center; 
       z-index: 2000; 
-      padding: 16px;
+      padding: clamp(10px, 2.5vw, 16px);
     }
     
     .card-dialog { 
       background: #ffffff; 
       width: 100%; 
       max-width: 600px; 
-      max-height: 90vh;
+      max-height: 94vh;
+      max-height: 94dvh;
       overflow-y: auto;
-      border-radius: 18px; 
-      padding: 28px; 
+      border-radius: clamp(14px, 3.5vw, 18px); 
+      padding: clamp(16px, 4vw, 28px); 
       color: #0f172a; 
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
       border: 1px solid #e2e8f0;
+      -webkit-overflow-scrolling: touch;
     }
     
-    .dialog-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-    .row-meta { display: flex; align-items: center; gap: 8px; }
+    .dialog-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px; }
+    .row-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .tag-cat { 
       background: #eff6ff; 
       color: #2563eb; 
@@ -165,8 +167,8 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
     .btn-close-corner {
       background: #f1f5f9;
       border: none;
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -174,17 +176,18 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       color: #64748b;
       cursor: pointer;
       transition: all 0.15s ease;
+      flex-shrink: 0;
     }
     .btn-close-corner:hover { background: #e2e8f0; color: #0f172a; }
 
-    .exercise-name { font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.3; }
-    .summary { font-size: 0.88rem; color: #475569; line-height: 1.5; margin-bottom: 20px; }
+    .exercise-name { font-size: clamp(1.15rem, 3.5vw, 1.4rem); font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.3; }
+    .summary { font-size: clamp(0.82rem, 2.2vw, 0.88rem); color: #475569; line-height: 1.5; margin-bottom: 18px; }
 
     /* Entrenador visual de respiración real */
     .pacer-container {
       background: linear-gradient(180deg, #0b1120 0%, #1e293b 100%);
       border-radius: 14px;
-      padding: 24px 20px;
+      padding: clamp(16px, 3.5vw, 24px) clamp(12px, 3vw, 20px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -196,12 +199,12 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
 
     .pacer-visual {
       position: relative;
-      width: 170px;
-      height: 170px;
+      width: clamp(130px, 36vw, 170px);
+      height: clamp(130px, 36vw, 170px);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 12px 0 16px 0;
+      margin: 10px 0 14px 0;
     }
 
     .outer-glow-ring {
@@ -217,8 +220,8 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
     }
 
     .pacer-circle {
-      width: 120px;
-      height: 120px;
+      width: clamp(90px, 25vw, 120px);
+      height: clamp(90px, 25vw, 120px);
       border-radius: 50%;
       background: radial-gradient(circle, #2563eb 0%, #1e3a8a 100%);
       display: flex;
@@ -254,7 +257,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .phase-timer {
-      font-size: 1.7rem;
+      font-size: clamp(1.3rem, 4vw, 1.7rem);
       font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
       color: #ffffff;
@@ -264,7 +267,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
 
     .pacer-meta-row {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .cycle-count {
       display: block;
@@ -276,7 +279,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       margin-bottom: 2px;
     }
     .phase-instruction {
-      font-size: 0.9rem;
+      font-size: clamp(0.82rem, 2.2vw, 0.9rem);
       color: #cbd5e1;
       font-weight: 500;
     }
@@ -284,23 +287,27 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
     .pacer-controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: 100%;
     }
 
     .btn-pacer-action {
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%);
       color: #ffffff;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: 10px;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
       transition: all 0.2s ease;
+      min-height: 42px;
     }
     .btn-pacer-action:hover {
       transform: translateY(-1px);
@@ -320,6 +327,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       align-items: center;
       gap: 6px;
       transition: all 0.15s ease;
+      min-height: 42px;
     }
     .btn-pacer-secondary:hover {
       background: rgba(255, 255, 255, 0.16);
@@ -330,18 +338,18 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
     /* Lista guiada */
     .instructions { 
       background: #f8fafc; 
-      padding: 18px; 
+      padding: clamp(14px, 3vw, 18px); 
       border-radius: 12px; 
       border: 1px solid #e2e8f0; 
-      margin-bottom: 24px; 
+      margin-bottom: 22px; 
     }
     .inst-head { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: #1e3a8a; margin-bottom: 10px; }
-    .inst-head svg { color: #2563eb; }
-    .instructions ol { margin-left: 20px; margin-top: 4px; }
+    .inst-head svg { color: #2563eb; flex-shrink: 0; }
+    .instructions ol { margin-left: 18px; margin-top: 4px; }
     .instructions li { font-size: 0.86rem; color: #475569; line-height: 1.55; margin-bottom: 6px; }
 
     /* Botones de acción inferiores */
-    .footer-btns { display: flex; justify-content: flex-end; gap: 12px; }
+    .footer-btns { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
     .btn-cancel { 
       background: #ffffff; 
       border: 1.5px solid #cbd5e1; 
@@ -352,6 +360,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       font-size: 0.88rem;
       color: #64748b;
       transition: all 0.15s ease;
+      min-height: 44px;
     }
     .btn-cancel:hover { background: #f8fafc; color: #0f172a; border-color: #94a3b8; }
     
@@ -366,13 +375,32 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       cursor: pointer; 
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
       transition: all 0.2s ease;
+      min-height: 44px;
     }
     .btn-finish:hover {
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(236, 72, 153, 0.35);
+    }
+
+    @media (max-width: 480px) {
+      .pacer-controls {
+        flex-direction: column;
+      }
+      .btn-pacer-action, .btn-pacer-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+      .footer-btns {
+        flex-direction: column-reverse;
+      }
+      .btn-cancel, .btn-finish {
+        width: 100%;
+        justify-content: center;
+      }
     }
   `]
 })
