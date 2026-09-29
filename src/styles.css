@@ -86,6 +86,11 @@ input, select, textarea, button {
   box-sizing: border-box;
 }
 
+/* Deshabilitar el redimensionamiento manual (tirador diagonal en esquina inferior derecha) en todos los textareas para proteger el diseño responsive */
+textarea {
+  resize: none !important;
+}
+
 /* Normalización crítica para inputs en iOS Safari (WebKit): 
    Previene que WebKit use content-box forzado y desborde el ancho disponible */
 input[type="date"],

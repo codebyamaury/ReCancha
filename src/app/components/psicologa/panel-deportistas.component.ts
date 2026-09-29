@@ -372,7 +372,7 @@ import { DeportistaClinica } from '../../models/recancha.models';
       color: #0f172a;
       background: #f8fafc;
       font-family: inherit;
-      resize: vertical;
+      resize: none;
       box-sizing: border-box;
       transition: all 0.15s ease;
     }

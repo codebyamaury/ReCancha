@@ -472,6 +472,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
       font-family: inherit;
       transition: all 0.15s ease;
       display: block;
+      resize: none;
     }
     .form-control:focus {
       outline: none;

@@ -211,6 +211,7 @@ import { RecanchaService } from '../../services/recancha.service';
       background: #f8fafc;
       color: #0f172a;
       box-sizing: border-box;
+      resize: none;
     }
     .txt-area:focus { outline: none; border-color: #2563eb; background: #fff; }
     

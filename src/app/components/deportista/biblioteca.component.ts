@@ -556,7 +556,7 @@ import { RecursoBiblioteca, ModalidadEjercicio } from '../../models/recancha.mod
       background: #ffffff;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
-    .text-area { resize: vertical; min-height: 80px; }
+    .text-area { resize: none; min-height: 80px; }
 
     .steps-head {
       display: flex;
