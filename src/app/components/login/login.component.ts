@@ -42,7 +42,7 @@ interface SeparatedParticle {
             </div>
 
             <h1 class="logo-title">
-              <span class="title-main">ReCancha</span>
+              <span class="title-main">PsicoConecta</span>
               <span class="title-dot">.</span>
             </h1>
             <p class="logo-subtitle">

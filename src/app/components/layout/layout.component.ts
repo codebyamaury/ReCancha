@@ -29,7 +29,7 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
                 <path d="M2 12h20"></path>
               </svg>
             </div>
-            <h2>ReCancha</h2>
+            <h2>PsicoConecta</h2>
             <button type="button" class="btn-close-drawer" (click)="cerrarSidebar()" aria-label="Cerrar navegación">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -150,7 +150,7 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
                   <path d="M2 12h20"></path>
                 </svg>
               </div>
-              <span class="mini-brand-title">ReCancha</span>
+              <span class="mini-brand-title">PsicoConecta</span>
             </div>
 
             <!-- Etiqueta de plataforma (oculta en pantallas muy pequeñas) -->
@@ -165,7 +165,7 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
               <span class="name">{{ service.usuarioActual().nombre || 'Usuario' }}</span>
               <span class="role">{{ service.usuarioActual().rol === 'deportista' ? 'Deportista IDERT' : 'Psicólogo/a Especialista' }}</span>
             </div>
-            <div class="avatar-badge">{{ service.usuarioActual().avatarIniciales || 'RC' }}</div>
+            <div class="avatar-badge">{{ service.usuarioActual().avatarIniciales || 'PC' }}</div>
           </div>
         </header>
 

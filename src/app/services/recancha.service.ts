@@ -170,7 +170,7 @@ export function calcularIniciales(nombre?: string | null, email?: string | null)
     const parteLocal = email.split('@')[0];
     return parteLocal.substring(0, Math.min(2, parteLocal.length)).toUpperCase();
   }
-  return 'RC';
+  return 'PC';
 }
 
 @Injectable({
@@ -194,7 +194,7 @@ export class RecanchaService {
       nombre: '',
       rol: 'deportista',
       consentimientoLey1581: false,
-      avatarIniciales: 'RC'
+      avatarIniciales: 'PC'
     };
   }
 
