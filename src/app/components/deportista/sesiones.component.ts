@@ -64,22 +64,22 @@ import { RecanchaService } from '../../services/recancha.service';
       </div>
 
       <div class="grid-form">
-        <div>
+        <div class="form-group">
           <label>Modalidad de Sesión</label>
-          <select [(ngModel)]="tipoSeleccionado" class="inp-ctrl">
+          <select [(ngModel)]="tipoSeleccionado" class="inp-ctrl select-ctrl">
             <option value="Sesión individual">Sesión individual (Evaluación y TCC)</option>
             <option value="Sesión grupal">Sesión grupal (Autodiálogo y Resiliencia)</option>
           </select>
         </div>
 
-        <div>
+        <div class="form-group">
           <label>Fecha de Consulta</label>
-          <input type="date" [(ngModel)]="fechaSeleccionada" class="inp-ctrl">
+          <input type="date" [(ngModel)]="fechaSeleccionada" class="inp-ctrl date-ctrl">
         </div>
 
-        <div>
+        <div class="form-group">
           <label>Horario Disponible</label>
-          <input type="time" [(ngModel)]="horaSeleccionada" class="inp-ctrl">
+          <input type="time" [(ngModel)]="horaSeleccionada" class="inp-ctrl time-ctrl">
         </div>
       </div>
 
@@ -171,10 +171,13 @@ import { RecanchaService } from '../../services/recancha.service';
     
     .form-card { 
       background: #ffffff; 
-      padding: clamp(18px, 3.5vw, 26px); 
+      padding: clamp(16px, 3.5vw, 26px); 
       border-radius: 14px; 
       border: 1px solid #e2e8f0; 
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     
     .card-header-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
@@ -190,13 +193,23 @@ import { RecanchaService } from '../../services/recancha.service';
     
     .grid-form { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); 
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
       gap: clamp(14px, 2.5vw, 18px); 
       margin-bottom: 20px; 
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-group {
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
     }
     .grid-form label { display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 6px; }
     .inp-ctrl { 
+      display: block;
       width: 100%; 
+      max-width: 100%;
+      min-width: 0;
       padding: 11px 14px; 
       border: 1.5px solid #e2e8f0; 
       border-radius: 8px; 
@@ -205,13 +218,43 @@ import { RecanchaService } from '../../services/recancha.service';
       background: #f8fafc;
       transition: all 0.15s ease;
       box-sizing: border-box;
-      min-height: 44px;
+      min-height: 46px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
     .inp-ctrl:focus { outline: none; border-color: #2563eb; background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
     
+    .select-ctrl {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 15 5 5 5-5'/%3E%3Cpath d='m7 9 5-5 5 5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+    }
+
+    .date-ctrl, .time-ctrl {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='4' rx='2' ry='2'/%3E%3Cline x1='16' x2='16' y1='2' y2='6'/%3E%3Cline x1='8' x2='8' y1='2' y2='6'/%3E%3Cline x1='3' x2='21' y1='10' y2='10'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+    }
+
+    .time-ctrl {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E");
+    }
+
+    input::-webkit-date-and-time-value {
+      text-align: left;
+      min-height: 1.4em;
+    }
+
     .submit-btn { width: fit-content; padding: 12px 24px; min-height: 44px; }
 
     @media (max-width: 768px) {
+      .grid-form {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
       .session-card-row {
         flex-direction: column;
         align-items: stretch;

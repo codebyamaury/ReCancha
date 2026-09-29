@@ -78,11 +78,31 @@ img, video, canvas, svg {
   vertical-align: middle;
 }
 
-/* Evitar que inputs en iOS hagan zoom automático menor a 16px */
+/* Evitar que inputs en iOS hagan zoom automático menor a 16px y normalizar box-sizing */
 input, select, textarea, button {
   font-family: inherit;
   font-size: max(16px, 0.88rem);
   touch-action: manipulation;
+  box-sizing: border-box;
+}
+
+/* Normalización crítica para inputs en iOS Safari (WebKit): 
+   Previene que WebKit use content-box forzado y desborde el ancho disponible */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Alineación consistente a la izquierda de texto en campos date/time de iOS Safari */
+input::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.3em;
 }
 
 /* Custom scrollbars */
