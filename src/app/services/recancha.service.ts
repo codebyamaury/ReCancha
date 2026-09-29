@@ -5,6 +5,158 @@ import { FirebaseService } from './firebase.service';
 const SESSION_STORAGE_KEY = 'recancha_usuario_activo';
 const EXERCISES_STORAGE_KEY = 'recancha_ejercicios_comp';
 const MOOD_STORAGE_KEY = 'recancha_animo_hoy';
+const BIBLIOTECA_STORAGE_KEY = 'recancha_biblioteca_recursos_v3';
+
+export const DEFAULT_RECURSOS: RecursoBiblioteca[] = [
+  { 
+    id: 'b1', 
+    categoria: 'Emociones', 
+    tipo: 'Ejercicio Interactivo · 6 min', 
+    titulo: 'Respiración diafragmática para la ansiedad', 
+    descripcion: 'Técnica de modulación fisiológica para reducir la activación simpática y calmar el ritmo cardíaco antes de fisioterapia o al ver entrenar al equipo.', 
+    accion: 'Iniciar ejercicio', 
+    modalidad: 'respiracion',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '20 de sep',
+    pasos: [
+      'Adopta una postura cómoda con la espalda recta y los hombros relajados.',
+      'Coloca una mano en tu pecho y otra en tu abdomen.',
+      'Inhala lentamente por la nariz en 4 tiempos sintiendo cómo se expande el abdomen.',
+      'Sostén el aire 2 segundos manteniendo la serenidad.',
+      'Exhala suavemente por la boca en 6 tiempos liberando la tensión física.',
+      'Repite el ciclo durante al menos 5 minutos continuos.'
+    ] 
+  },
+  { 
+    id: 'b2', 
+    categoria: 'Autoestima', 
+    tipo: 'Guía Clínica TCC · 15 min', 
+    titulo: 'Reestructuración de pensamientos negativos', 
+    descripcion: 'Registro de evidencias cognitivas: identifica frases derrotistas sobre tu lesión y contrarréstalas con hechos objetivos de tu progreso médico.', 
+    accion: 'Iniciar ejercicio',
+    modalidad: 'reestructuracion',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '21 de sep',
+    pasos: [
+      'Identifica el pensamiento automático negativo (ej. "nunca volveré a jugar igual").',
+      'Clasifica la distorsión cognitiva (catastrofismo, pensamiento todo o nada).',
+      'Reúne evidencias objetivas reales en contra (avances de fuerza, diagnóstico médico favorable).',
+      'Formula una alternativa adaptativa y funcional que impulse tu rehabilitación.'
+    ]
+  },
+  { 
+    id: 'b3', 
+    categoria: 'Autodiálogo', 
+    tipo: 'Entrenamiento · 8 min', 
+    titulo: 'Autodiálogo positivo en la recuperación', 
+    descripcion: 'Estrategias de habla interna para reemplazar frustración por autoafirmaciones que potencian la adherencia a la fisioterapia diaria.', 
+    accion: 'Iniciar ejercicio',
+    modalidad: 'autodialogo',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '22 de sep',
+    pasos: [
+      'Registra las frases internas limitantes durante el dolor o el cansancio.',
+      'Sustituye "mi cuerpo me falló" por "mi cuerpo se está regenerando día a día con disciplina".',
+      'Repite tus frases potenciadoras en voz baja antes de cada serie de ejercicios físicos.'
+    ]
+  },
+  { 
+    id: 'b4', 
+    categoria: 'Metas', 
+    tipo: 'Planificación SMART · 10 min', 
+    titulo: 'Micro-metas semanales de rehabilitación', 
+    descripcion: 'Metodología para definir objetivos pequeños, medibles y realistas de evolución clínica fuera del terreno de juego.', 
+    accion: 'Iniciar ejercicio',
+    modalidad: 'metas',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '23 de sep',
+    pasos: [
+      'Define 1 objetivo motriz o de movilidad concreto para los próximos 7 días.',
+      'Asocia una recompensa psicológica a cada hito superado.',
+      'Verifica semanalmente tus metas con tu fisioterapeuta y psicóloga.'
+    ]
+  },
+  { 
+    id: 'b5', 
+    categoria: 'Visualización', 
+    tipo: 'Imaginería Guiada · 10 min', 
+    titulo: 'Visualización motora y retorno a la cancha', 
+    descripcion: 'Activación de patrones neuromusculares mediante imaginería mental del retorno seguro, confiado y sin dolor al campo de juego.', 
+    accion: 'Iniciar ejercicio',
+    modalidad: 'visualizacion',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '24 de sep',
+    pasos: [
+      'Cierra los ojos en un espacio en silencio y relaja tu respiración.',
+      'Reconstruye mentalmente tu cancha habitual con todos tus sentidos (olor, sonido, textura del césped).',
+      'Visualiza tu gesto técnico con fluidez milimétrica y tu articulación completamente sólida y recuperada.',
+      'Siente la emoción y la confianza de volver a ganar con tu equipo.'
+    ]
+  },
+  { 
+    id: 'b6', 
+    categoria: 'Emociones', 
+    tipo: 'Reflexión Clínica · 12 min', 
+    titulo: 'Aceptación de la fase de inmovilización', 
+    descripcion: 'Proceso de duelo deportivo y adaptación emocional ante el reposo físico prescrito por el cuerpo médico.', 
+    accion: 'Abrir guía',
+    modalidad: 'lectura',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '25 de sep',
+    pasos: [
+      'Reconoce la rabia y tristeza como respuestas naturales ante la pausa deportiva forzada.',
+      'Diferencia lo que no puedes controlar (el tiempo de cicatrización) de lo que sí (tu descanso, nutrición y actitud).',
+      'Redirige tu energía competitiva hacia tu proceso de rehabilitación personal.'
+    ]
+  },
+  { 
+    id: 'b7', 
+    categoria: 'Emociones', 
+    tipo: 'Comunicación · 7 min', 
+    titulo: 'Comunicación asertiva con el cuerpo técnico', 
+    descripcion: 'Cómo expresar sensaciones al entrenador y médico sin temor a perder tu lugar en la convocatoria.', 
+    accion: 'Abrir guía',
+    modalidad: 'lectura',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '26 de sep',
+    pasos: [
+      'Prepara los datos objetivos de tu evolución antes de hablar con el cuerpo técnico.',
+      'Expresa con claridad tus límites de dolor actuales sin sentir culpa.',
+      'Propón tareas de apoyo al equipo durante los entrenamientos colectivos.'
+    ]
+  },
+  { 
+    id: 'b8', 
+    categoria: 'Autoestima', 
+    tipo: 'Psicoeducación · 10 min', 
+    titulo: 'Identidad atlética y valor personal', 
+    descripcion: 'Comprender que tu valor como persona trasciende los minutos en cancha y fortalece tu resiliencia para el futuro.', 
+    accion: 'Abrir guía',
+    modalidad: 'lectura',
+    subidoPor: 'Psicología Deportiva IDERT',
+    fechaPublicacion: '27 de sep',
+    pasos: [
+      'Escribe tres fortalezas tuyas que no dependan exclusivamente de tu rendimiento físico.',
+      'Valora el conocimiento táctico y de resiliencia que esta pausa te está aportando.',
+      'Recuerda que los grandes atletas se definen por cómo superaron sus momentos más difíciles.'
+    ]
+  }
+];
+
+function recuperarBibliotecaGuardada(): RecursoBiblioteca[] {
+  try {
+    const data = localStorage.getItem(BIBLIOTECA_STORAGE_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo biblioteca de localStorage:', e);
+  }
+  return DEFAULT_RECURSOS;
+}
 
 export function calcularIniciales(nombre?: string | null, email?: string | null): string {
   if (nombre && nombre.trim().length > 0) {
@@ -52,9 +204,12 @@ export class RecanchaService {
   ejercicioSeleccionado = signal<RecursoBiblioteca | null>(null);
   toastMensaje = signal<string | null>(null);
 
+  // Biblioteca clínica de recursos (persistida localmente y en Firestore)
+  biblioteca = signal<RecursoBiblioteca[]>(recuperarBibliotecaGuardada());
+
   // Progreso real de ejercicios persistido
   ejerciciosCompletados = signal<number>(parseInt(localStorage.getItem(EXERCISES_STORAGE_KEY) || '2', 10));
-  totalEjercicios = signal<number>(8);
+  totalEjercicios = signal<number>(this.biblioteca().length);
   animoSeleccionadoHoy = signal<number>(parseInt(localStorage.getItem(MOOD_STORAGE_KEY) || '4', 10));
 
   // Expedientes clínicos reales de deportistas IDERT
@@ -71,101 +226,54 @@ export class RecanchaService {
     { id: 'ses-02', titulo: 'Sesión grupal: autodiálogo y resiliencia', fechaTexto: 'Viernes 2 de octubre', horaTexto: '5:00 p. m.', psicologa: 'Especialista en Psicología Deportiva IDERT', deportistaNombre: 'Amaury Mendoza', tipo: 'Sesión grupal' }
   ]);
 
-  biblioteca = signal<RecursoBiblioteca[]>([
-    { 
-      id: 'b1', 
-      categoria: 'Emociones', 
-      tipo: 'Ejercicio Interactivo · 6 min', 
-      titulo: 'Respiración diafragmática para la ansiedad', 
-      descripcion: 'Técnica de modulación fisiológica para reducir la activación simpática y calmar el ritmo cardíaco antes de fisioterapia o al ver entrenar al equipo.', 
-      accion: 'Iniciar ejercicio', 
-      pasos: [
-        'Adopta una postura cómoda con la espalda recta y los hombros relajados.',
-        'Coloca una mano en tu pecho y otra en tu abdomen.',
-        'Inhala lentamente por la nariz en 4 tiempos sintiendo cómo se expande el abdomen.',
-        'Sostén el aire 2 segundos manteniendo la serenidad.',
-        'Exhala suavemente por la boca en 6 tiempos liberando la tensión física.',
-        'Repite el ciclo durante al menos 5 minutos continuos.'
-      ] 
-    },
-    { 
-      id: 'b2', 
-      categoria: 'Autoestima', 
-      tipo: 'Guía Clínica · 15 min', 
-      titulo: 'Reestructuración de pensamientos negativos', 
-      descripcion: 'Registro de evidencias cognitivas: identifica frases derrotistas sobre tu lesión y contrarréstalas con hechos objetivos de tu progreso.', 
-      accion: 'Abrir guía',
-      pasos: [
-        'Identifica el pensamiento automático (ej. "nunca volveré a jugar igual").',
-        'Busca evidencias reales en contra de ese pensamiento.',
-        'Formula un pensamiento alternativo y adaptativo basado en la realidad médica.',
-        'Califica tu nivel de malestar antes y después del ejercicio.'
-      ]
-    },
-    { 
-      id: 'b3', 
-      categoria: 'Autodiálogo', 
-      tipo: 'Entrenamiento · 8 min', 
-      titulo: 'Autodiálogo positivo en la recuperación', 
-      descripcion: 'Estrategias de habla interna para reemplazar frustración por autoafirmaciones que potencian la adherencia a la rehabilitación.', 
-      accion: 'Abrir guía',
-      pasos: [
-        'Registra las frases internas más frecuentes durante el dolor físico.',
-        'Sustituye "mi cuerpo me falló" por "mi cuerpo se está reparando día a día".',
-        'Practica las nuevas frases en voz baja durante tus sesiones de fisioterapia.'
-      ]
-    },
-    { 
-      id: 'b4', 
-      categoria: 'Metas', 
-      tipo: 'Planificación · 10 min', 
-      titulo: 'Micro-metas semanales de rehabilitación', 
-      descripcion: 'Metodología SMART para definir objetivos pequeños, medibles y realistas fuera del terreno de juego.', 
-      accion: 'Abrir guía',
-      pasos: [
-        'Define un objetivo motriz o de movilidad para los próximos 7 días.',
-        'Asocia una recompensa psicológica a cada avance completado.',
-        'Comparte tu meta con tu fisioterapeuta y psicóloga para validarla.'
-      ]
-    },
-    { 
-      id: 'b5', 
-      categoria: 'Autoestima', 
-      tipo: 'Técnica de Visualización · 10 min', 
-      titulo: 'Visualización motora guiada', 
-      descripcion: 'Activación de patrones neuromusculares mediante imaginería mental del retorno seguro y confiado a la cancha.', 
-      accion: 'Iniciar ejercicio',
-      pasos: [
-        'Cierra los ojos y visualiza el campo de juego con todos tus sentidos.',
-        'Imagínate realizando los movimientos técnicos con fluidez y sin dolor.',
-        'Siente la firmeza de tu articulación y la confianza en tu entrenamiento.'
-      ]
-    },
-    { 
-      id: 'b6', 
-      categoria: 'Emociones', 
-      tipo: 'Reflexión Guiada · 12 min', 
-      titulo: 'Aceptación de la fase de inmovilización', 
-      descripcion: 'Proceso de duelo deportivo y adaptación emocional ante el reposo físico prescrito por el cuerpo médico.', 
-      accion: 'Abrir guía'
-    },
-    { 
-      id: 'b7', 
-      categoria: 'Emociones', 
-      tipo: 'Comunicación · 7 min', 
-      titulo: 'Comunicación asertiva con el cuerpo técnico', 
-      descripcion: 'Cómo expresar lo que sientes sin temor a perder tu lugar en la convocatoria ni aislarte de tus compañeras.', 
-      accion: 'Abrir guía'
-    },
-    { 
-      id: 'b8', 
-      categoria: 'Autoestima', 
-      tipo: 'Psicoeducación · 10 min', 
-      titulo: 'Identidad atlética y valor personal', 
-      descripcion: 'Comprender que tu valor como persona trasciende los minutos en cancha y fortalece tu resiliencia para el futuro.', 
-      accion: 'Abrir guía'
+  constructor() {
+    // Sincronizar en segundo plano con Firestore si hay recursos remotos
+    this.fb.obtenerRecursosBiblioteca().then(remotos => {
+      if (remotos && remotos.length > 0) {
+        const ids = new Set(remotos.map(r => r.id));
+        const locales = this.biblioteca().filter(l => !ids.has(l.id));
+        const combinados = [...remotos, ...locales];
+        this.biblioteca.set(combinados);
+        this.totalEjercicios.set(combinados.length);
+        this.guardarBibliotecaLocal(combinados);
+      }
+    }).catch(e => console.warn('Error inicial sincronizando biblioteca Firestore:', e));
+  }
+
+  guardarBibliotecaLocal(items: RecursoBiblioteca[]) {
+    try {
+      localStorage.setItem(BIBLIOTECA_STORAGE_KEY, JSON.stringify(items));
+    } catch (e) {
+      console.warn('Error guardando biblioteca en localStorage:', e);
     }
-  ]);
+  }
+
+  publicarRecursoBiblioteca(nuevo: Omit<RecursoBiblioteca, 'id'> & { id?: string }) {
+    const id = nuevo.id || 'rec-' + Date.now();
+    const recursoCompleto: RecursoBiblioteca = {
+      ...nuevo,
+      id,
+      subidoPor: nuevo.subidoPor || this.usuarioActual().nombre || 'Psicólogo/a Especialista IDERT',
+      fechaPublicacion: nuevo.fechaPublicacion || new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }),
+      accion: nuevo.accion || (nuevo.modalidad === 'lectura' ? 'Abrir guía' : 'Iniciar ejercicio')
+    };
+
+    const listaActualizada = [recursoCompleto, ...this.biblioteca()];
+    this.biblioteca.set(listaActualizada);
+    this.totalEjercicios.set(listaActualizada.length);
+    this.guardarBibliotecaLocal(listaActualizada);
+    this.fb.guardarRecursoBiblioteca(recursoCompleto).catch(e => console.warn(e));
+    this.mostrarToast('¡Nuevo recurso clínico publicado con éxito en la Biblioteca!');
+  }
+
+  eliminarRecursoBiblioteca(id: string) {
+    const filtrados = this.biblioteca().filter(x => x.id !== id);
+    this.biblioteca.set(filtrados);
+    this.totalEjercicios.set(filtrados.length);
+    this.guardarBibliotecaLocal(filtrados);
+    this.fb.eliminarRecursoBiblioteca(id).catch(e => console.warn(e));
+    this.mostrarToast('Recurso retirado de la Biblioteca');
+  }
 
   establecerUsuario(usuario: UsuarioReCancha) {
     this.usuarioActual.set(usuario);

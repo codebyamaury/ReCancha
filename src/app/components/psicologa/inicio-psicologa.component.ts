@@ -95,6 +95,29 @@ import { RecanchaService } from '../../services/recancha.service';
           <span>Gestionar todas las sesiones</span>
         </button>
       </div>
+
+      <!-- 4. Biblioteca Terapéutica y Prescripción Clínica -->
+      <div class="stat-card">
+        <div class="stat-header">
+          <h3>Biblioteca terapéutica</h3>
+          <div class="icon-chip blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+              <path d="M6 6h10"></path>
+              <path d="M6 10h10"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="big-num text-blue">{{ service.biblioteca().length }}</div>
+        <p class="sub">Protocolos clínicos, herramientas TCC y ejercicios publicados</p>
+        <button type="button" class="btn-stat-action" routerLink="/app/biblioteca">
+          <span>Gestionar y subir recursos</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
   `,
   styles: [`

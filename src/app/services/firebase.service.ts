@@ -273,4 +273,46 @@ export class FirebaseService {
       return () => {};
     }
   }
+
+  /* ================= RECURSOS CLÍNICOS DE BIBLIOTECA EN FIRESTORE ================= */
+
+  async guardarRecursoBiblioteca(recurso: any): Promise<string | null> {
+    if (!this.firestore) return null;
+    try {
+      const colRef = collection(this.firestore, 'recursos_biblioteca');
+      if (recurso.id && !recurso.id.startsWith('b')) {
+        const docRef = doc(this.firestore, 'recursos_biblioteca', recurso.id);
+        await setDoc(docRef, { ...recurso, actualizadoEn: serverTimestamp() }, { merge: true });
+        return recurso.id;
+      } else {
+        const docRef = await addDoc(colRef, { ...recurso, creadoEn: serverTimestamp() });
+        return docRef.id;
+      }
+    } catch (e) {
+      console.warn('Firestore: no se pudo guardar recurso de biblioteca:', e);
+      return null;
+    }
+  }
+
+  async obtenerRecursosBiblioteca(): Promise<any[]> {
+    if (!this.firestore) return [];
+    try {
+      const colRef = collection(this.firestore, 'recursos_biblioteca');
+      const snap = await getDocs(colRef);
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) {
+      console.warn('Firestore: no se pudieron cargar recursos de biblioteca:', e);
+      return [];
+    }
+  }
+
+  async eliminarRecursoBiblioteca(id: string): Promise<void> {
+    if (!this.firestore || !id) return;
+    try {
+      const docRef = doc(this.firestore, 'recursos_biblioteca', id);
+      await deleteDoc(docRef);
+    } catch (e) {
+      console.warn('Firestore: error eliminando recurso:', e);
+    }
+  }
 }

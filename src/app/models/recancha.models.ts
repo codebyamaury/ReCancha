@@ -30,12 +30,24 @@ export interface SesionCita {
   tipo: 'Sesión individual' | 'Sesión grupal';
 }
 
+export type ModalidadEjercicio = 
+  | 'respiracion' 
+  | 'reestructuracion' 
+  | 'autodialogo' 
+  | 'visualizacion' 
+  | 'metas' 
+  | 'lectura';
+
 export interface RecursoBiblioteca {
   id: string;
-  categoria: 'Emociones' | 'Autoestima' | 'Autodiálogo' | 'Metas';
+  categoria: 'Emociones' | 'Autoestima' | 'Autodiálogo' | 'Metas' | 'Visualización' | 'Rehabilitación' | string;
   tipo: string;
   titulo: string;
   descripcion: string;
   accion: 'Iniciar ejercicio' | 'Abrir guía' | 'Abrir';
+  modalidad?: ModalidadEjercicio;
+  subidoPor?: string;
+  fechaPublicacion?: string;
   pasos?: string[];
+  contenidoDetallado?: string;
 }
