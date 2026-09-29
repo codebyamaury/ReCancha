@@ -1,0 +1,65 @@
+:root {
+  /* Paleta Corporativa Profesional: Blanco, Rosado, Azul */
+  --color-white: #ffffff;
+  --color-blue-dark: #0f172a;
+  --color-blue-deep: #1e3a8a;
+  --color-blue-primary: #2563eb;
+  --color-blue-light: #3b82f6;
+  --color-blue-subtle: #eff6ff;
+
+  --color-pink-primary: #ec4899;
+  --color-pink-deep: #db2777;
+  --color-pink-light: #f472b6;
+  --color-pink-subtle: #fdf2f8;
+
+  --gradient-brand: linear-gradient(135deg, #2563eb 0%, #db2777 100%);
+  --gradient-brand-hover: linear-gradient(135deg, #1d4ed8 0%, #be185d 100%);
+  --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #ec4899 100%);
+  --gradient-bg-hero: radial-gradient(circle at 50% 10%, #1e3a8a 0%, #0f172a 100%);
+
+  /* Aliases para compatibilidad */
+  --primary-forest: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent-green: #ec4899;
+
+  --bg-slate: #f8fafc;
+  --card-white: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+  
+  --danger-bg: #fff1f2;
+  --danger-text: #e11d48;
+  --success-bg: #eff6ff;
+  --success-text: #1d4ed8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  background-color: var(--bg-slate);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
