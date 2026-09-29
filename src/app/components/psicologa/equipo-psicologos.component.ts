@@ -319,8 +319,8 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       </section>
 
       <!-- ================= MODAL: NOMBRAR PSICÓLOGO PRINCIPAL ================= -->
-      <div class="modal-overlay" *ngIf="psicologoParaPrincipal" (click)="psicologoParaPrincipal = null">
-        <div class="modal-card modal-principal" (click)="$event.stopPropagation()">
+      <div class="modal-overlay" *ngIf="psicologoParaPrincipal">
+        <div class="modal-card modal-principal">
           <div class="principal-modal-icon">
             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
@@ -368,8 +368,8 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       </div>
 
       <!-- ================= MODAL: CONFIRMAR ELIMINACIÓN (SIN ALERTS NATIVOS) ================= -->
-      <div class="modal-overlay" *ngIf="psicologoAEliminar" (click)="psicologoAEliminar = null">
-        <div class="modal-card modal-confirm" (click)="$event.stopPropagation()">
+      <div class="modal-overlay" *ngIf="psicologoAEliminar">
+        <div class="modal-card modal-confirm">
           <div class="confirm-icon-box danger">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M3 6h18"></path>
@@ -392,8 +392,8 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       </div>
 
       <!-- ================= MODAL: REGISTRAR NUEVO PSICÓLOGO ================= -->
-      <div class="modal-overlay" *ngIf="mostrarModalRegistro" (click)="cerrarModalRegistro()">
-        <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-overlay" *ngIf="mostrarModalRegistro">
+        <div class="modal-card">
           <header class="modal-header">
             <div class="modal-badge-row">
               <span class="badge-pill">ALTA DE PERSONAL CLÍNICO</span>
@@ -415,10 +415,12 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
             <div class="form-group">
               <label for="nuevo-nombre" class="form-label">Nombre y Apellidos del Profesional *</label>
               <div class="input-with-icon">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+                <span class="field-prefix-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
                 <input 
                   id="nuevo-nombre" 
                   type="text" 
@@ -426,6 +428,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                   name="nuevoNombre" 
                   placeholder="Ej: Dr. Fernando Galvis" 
                   required
+                  (keydown.enter)="$event.preventDefault()"
                   class="form-control">
               </div>
             </div>
@@ -434,10 +437,12 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
             <div class="form-group">
               <label for="nuevo-email" class="form-label">Correo Electrónico Institucional *</label>
               <div class="input-with-icon">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                </svg>
+                <span class="field-prefix-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                  </svg>
+                </span>
                 <input 
                   id="nuevo-email" 
                   type="email" 
@@ -445,6 +450,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                   name="nuevoEmail" 
                   placeholder="ejemplo.psico@idert.gov.co" 
                   required
+                  (keydown.enter)="$event.preventDefault()"
                   class="form-control">
               </div>
             </div>
@@ -466,10 +472,12 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                 </button>
               </div>
               <div class="input-with-icon input-with-toggle">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
+                <span class="field-prefix-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
                 <input 
                   id="nuevo-password" 
                   [type]="mostrarPassModal ? 'text' : 'password'" 
@@ -477,17 +485,19 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                   name="nuevoPassword" 
                   placeholder="Mínimo 6 caracteres" 
                   required
+                  (keydown.enter)="$event.preventDefault()"
                   class="form-control">
                 <button 
                   type="button" 
                   class="btn-toggle-eye" 
-                  (click)="mostrarPassModal = !mostrarPassModal"
-                  [attr.aria-label]="mostrarPassModal ? 'Ocultar contraseña' : 'Ver contraseña'">
-                  <svg *ngIf="!mostrarPassModal" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  (click)="togglePasswordModal($event)"
+                  [attr.aria-label]="mostrarPassModal ? 'Ocultar contraseña' : 'Ver contraseña'"
+                  [title]="mostrarPassModal ? 'Ocultar contraseña' : 'Ver contraseña'">
+                  <svg *ngIf="!mostrarPassModal" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                   </svg>
-                  <svg *ngIf="mostrarPassModal" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg *ngIf="mostrarPassModal" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
                     <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
                     <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
@@ -538,15 +548,18 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
             <div class="form-group">
               <label for="nueva-especialidad" class="form-label">Área de Especialidad Clínica *</label>
               <div class="input-with-icon">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>
+                <span class="field-prefix-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                  </svg>
+                </span>
                 <input 
                   id="nueva-especialidad" 
                   type="text" 
                   [(ngModel)]="nuevaEspecialidad" 
                   name="nuevaEspecialidad" 
                   placeholder="Ej: Neurocognición y Readaptación al Dolor" 
+                  (keydown.enter)="$event.preventDefault()"
                   class="form-control">
               </div>
             </div>
@@ -570,8 +583,8 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       </div>
 
       <!-- ================= MODAL: VER / COMPARTIR CREDENCIALES ================= -->
-      <div class="modal-overlay" *ngIf="psicologoCredenciales" (click)="psicologoCredenciales = null">
-        <div class="modal-card modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-overlay" *ngIf="psicologoCredenciales">
+        <div class="modal-card modal-sm">
           <header class="modal-header">
             <div class="modal-badge-row">
               <span class="badge-pill">CREDENCIALES DE ACCESO</span>
@@ -1532,24 +1545,36 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       position: relative;
       display: flex;
       align-items: center;
+      width: 100%;
     }
 
-    .input-with-icon svg {
+    .field-prefix-icon {
       position: absolute;
-      left: 12px;
+      left: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #94a3b8;
       pointer-events: none;
+      z-index: 2;
+    }
+
+    .field-prefix-icon svg {
+      display: block;
+      color: currentColor;
     }
 
     .form-control {
       width: 100%;
-      padding: 10px 14px 10px 38px;
+      padding: 11px 14px 11px 40px;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
       font-size: 0.88rem;
       color: #0f172a;
+      background: #ffffff;
       outline: none;
       transition: all 0.15s ease;
+      box-sizing: border-box;
     }
 
     .form-control:focus {
@@ -1557,16 +1582,46 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    .input-with-toggle .form-control { padding-right: 40px; }
+    .input-with-toggle .form-control {
+      padding-right: 46px;
+    }
 
     .btn-toggle-eye {
       position: absolute;
-      right: 10px;
-      background: none;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
       border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 4px;
+      cursor: pointer !important;
+      padding: 6px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      transition: all 0.15s ease;
+      z-index: 10;
+      pointer-events: auto !important;
+    }
+
+    .btn-toggle-eye:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-toggle-eye:active {
+      transform: translateY(-50%) scale(0.92);
+    }
+
+    .btn-toggle-eye svg {
+      position: static !important;
+      left: auto !important;
+      pointer-events: auto !important;
+      color: currentColor !important;
+      display: block;
+      width: 18px;
+      height: 18px;
     }
 
     /* Role Choice Cards */
@@ -1792,6 +1847,7 @@ export class EquipoPsicologosComponent {
     this.nuevoNombre = '';
     this.nuevoEmail = '';
     this.generarPasswordSegura();
+    this.mostrarPassModal = false;
     this.nuevoNivel = 'especialista';
     this.nuevaEspecialidad = 'Psicología Deportiva de Alto Rendimiento';
     this.mostrarModalRegistro = true;
@@ -1799,6 +1855,15 @@ export class EquipoPsicologosComponent {
 
   cerrarModalRegistro() {
     this.mostrarModalRegistro = false;
+    this.mostrarPassModal = false;
+  }
+
+  togglePasswordModal(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.mostrarPassModal = !this.mostrarPassModal;
   }
 
   generarPasswordSegura() {
