@@ -1171,6 +1171,32 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.cargando = true;
 
+    // 1. Verificar si coincide con las credenciales creadas directamente por el Psicólogo Principal en el Equipo Clínico
+    const miembroEquipo = this.service.verificarCredencialesPsicologo(this.email.trim(), this.password);
+    if (miembroEquipo) {
+      if (miembroEquipo.estado === 'inactivo') {
+        this.mensajeError = 'Esta cuenta se encuentra temporalmente suspendida o inactiva. Comunícate con el Psicólogo Principal (Director Clínico).';
+        this.cargando = false;
+        return;
+      }
+      this.service.establecerUsuario({
+        uid: miembroEquipo.id,
+        email: miembroEquipo.email,
+        nombre: miembroEquipo.nombre,
+        rol: 'psicologa',
+        nivel: miembroEquipo.nivel,
+        consentimientoLey1581: this.consentimiento,
+        avatarIniciales: miembroEquipo.avatarIniciales || calcularIniciales(miembroEquipo.nombre, miembroEquipo.email),
+        fotoUrl: miembroEquipo.fotoUrl || ''
+      });
+
+      this.service.mostrarToast(`¡Bienvenida(o), ${miembroEquipo.nombre}! (${miembroEquipo.nivel === 'director' ? 'Psicólogo Principal' : 'Especialista'})`);
+      this.router.navigate(['/app/inicio-psicologa']);
+      this.cargando = false;
+      return;
+    }
+
+    // 2. Si no es credencial local de equipo, autenticar contra Firebase Authentication
     try {
       const res = await this.fb.loginWithEmail(this.email.trim(), this.password);
       const user = res.user;
@@ -1179,11 +1205,16 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       const email = user.email || this.email.trim();
       const fotoUrl = user.photoURL || '';
 
+      // Determinar si en el equipo tiene rol de director o especialista
+      const enEquipo = this.service.psicologos().find(p => p.email.toLowerCase() === email.toLowerCase());
+      const nivel = enEquipo ? enEquipo.nivel : 'director';
+
       this.service.establecerUsuario({
         uid: user.uid,
         email: email,
         nombre: nombre,
         rol: 'psicologa',
+        nivel: nivel,
         consentimientoLey1581: this.consentimiento,
         avatarIniciales: calcularIniciales(nombre, email),
         fotoUrl: fotoUrl

@@ -101,6 +101,15 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
               </svg>
               <span>Deportistas</span>
             </a>
+            <a routerLink="equipo-psicologos" routerLinkActive="current" class="item" (click)="cerrarSidebar()">
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Equipo Clínico</span>
+            </a>
             <a routerLink="biblioteca" routerLinkActive="current" class="item" (click)="cerrarSidebar()">
               <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
@@ -163,7 +172,7 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
           <div class="profile-tag">
             <div class="info">
               <span class="name">{{ service.usuarioActual().nombre || 'Usuario' }}</span>
-              <span class="role">{{ service.usuarioActual().rol === 'deportista' ? 'Deportista IDERT' : 'Psicólogo/a Especialista' }}</span>
+              <span class="role">{{ service.usuarioActual().rol === 'deportista' ? 'Deportista IDERT' : (service.usuarioActual().nivel === 'director' ? 'Psicólogo Principal · Director' : 'Psicólogo/a Especialista') }}</span>
             </div>
             
             <div class="avatar-badge" (click)="fileInput.click()" title="Cambiar o subir foto de perfil">
@@ -249,6 +258,15 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
               <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
             </svg>
             <span>Deportistas</span>
+          </a>
+          <a routerLink="equipo-psicologos" routerLinkActive="active" class="bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Equipo</span>
           </a>
           <a routerLink="biblioteca" routerLinkActive="active" class="bottom-nav-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

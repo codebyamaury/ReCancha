@@ -315,4 +315,40 @@ export class FirebaseService {
       console.warn('Firestore: error eliminando recurso:', e);
     }
   }
+
+  /* ================= GESTIÓN DEL EQUIPO DE PSICÓLOGOS EN FIRESTORE ================= */
+
+  async guardarPsicologo(psicologo: any): Promise<string | null> {
+    if (!this.firestore) return null;
+    try {
+      const docRef = doc(this.firestore, 'equipo_psicologia', psicologo.id);
+      await setDoc(docRef, { ...psicologo, actualizadoEn: serverTimestamp() }, { merge: true });
+      return psicologo.id;
+    } catch (e) {
+      console.warn('Firestore: error guardando psicólogo en equipo:', e);
+      return null;
+    }
+  }
+
+  async obtenerPsicologos(): Promise<any[]> {
+    if (!this.firestore) return [];
+    try {
+      const colRef = collection(this.firestore, 'equipo_psicologia');
+      const snap = await getDocs(colRef);
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) {
+      console.warn('Firestore: error cargando equipo de psicólogos:', e);
+      return [];
+    }
+  }
+
+  async eliminarPsicologo(id: string): Promise<void> {
+    if (!this.firestore || !id) return;
+    try {
+      const docRef = doc(this.firestore, 'equipo_psicologia', id);
+      await deleteDoc(docRef);
+    } catch (e) {
+      console.warn('Firestore: error eliminando psicólogo:', e);
+    }
+  }
 }

@@ -1,10 +1,26 @@
 export type RolUsuario = 'deportista' | 'psicologa';
+export type NivelPsicologo = 'director' | 'especialista';
+
+export interface PsicologoMiembro {
+  id: string;
+  nombre: string;
+  email: string;
+  password?: string;
+  nivel: NivelPsicologo;
+  especialidad: string;
+  estado: 'activo' | 'inactivo';
+  fechaRegistro: string;
+  deportistasAsignados?: number;
+  avatarIniciales: string;
+  fotoUrl?: string;
+}
 
 export interface UsuarioReCancha {
   uid: string;
   email: string;
   nombre: string;
   rol: RolUsuario;
+  nivel?: NivelPsicologo;
   consentimientoLey1581: boolean;
   avatarIniciales: string;
   fotoUrl?: string;

@@ -118,6 +118,32 @@ import { RecanchaService } from '../../services/recancha.service';
           </svg>
         </button>
       </div>
+
+      <!-- 5. Equipo Clínico y Asignación de Roles -->
+      <div class="stat-card">
+        <div class="stat-header">
+          <h3>Equipo clínico</h3>
+          <div class="icon-chip gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="big-num text-gold">{{ service.psicologos().length }}</div>
+        <p class="sub">
+          {{ service.esPsicologoPrincipal() ? 'Eres Psicólogo Principal: control directivo y asignación de roles' : 'Especialistas adscritos al equipo de telepsicología' }}
+        </p>
+        <button type="button" class="btn-stat-action" routerLink="/app/equipo-psicologos">
+          <span>Gestionar equipo y roles</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
   `,
   styles: [`
@@ -156,10 +182,12 @@ import { RecanchaService } from '../../services/recancha.service';
     .icon-chip.blue { background: #eff6ff; color: #2563eb; }
     .icon-chip.pink { background: #fdf2f8; color: #ec4899; }
     .icon-chip.purple { background: #faf5ff; color: #9333ea; }
+    .icon-chip.gold { background: #fef3c7; color: #d97706; }
     
     .big-num { font-size: clamp(2.2rem, 6vw, 2.8rem); font-weight: 800; line-height: 1; margin: 14px 0 8px 0; }
     .text-blue { color: #2563eb; }
     .text-pink { color: #ec4899; }
+    .text-gold { color: #d97706; }
     
     .sub { font-size: 0.85rem; color: #64748b; line-height: 1.45; }
     

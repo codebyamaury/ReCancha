@@ -7,6 +7,7 @@ import { BibliotecaComponent } from './components/deportista/biblioteca.componen
 import { SeguimientoComponent } from './components/deportista/seguimiento.component';
 import { InicioPsicologaComponent } from './components/psicologa/inicio-psicologa.component';
 import { PanelDeportistasComponent } from './components/psicologa/panel-deportistas.component';
+import { EquipoPsicologosComponent } from './components/psicologa/equipo-psicologos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,7 +22,8 @@ export const routes: Routes = [
       { path: 'biblioteca', component: BibliotecaComponent },
       { path: 'seguimiento', component: SeguimientoComponent },
       { path: 'inicio-psicologa', component: InicioPsicologaComponent },
-      { path: 'deportistas', component: PanelDeportistasComponent }
+      { path: 'deportistas', component: PanelDeportistasComponent },
+      { path: 'equipo-psicologos', component: EquipoPsicologosComponent }
     ]
   },
   { path: '**', redirectTo: 'login' }

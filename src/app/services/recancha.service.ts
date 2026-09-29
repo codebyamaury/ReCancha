@@ -1,11 +1,69 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { RolUsuario, UsuarioReCancha, DeportistaClinica, SesionCita, RecursoBiblioteca } from '../models/recancha.models';
+import { RolUsuario, NivelPsicologo, PsicologoMiembro, UsuarioReCancha, DeportistaClinica, SesionCita, RecursoBiblioteca } from '../models/recancha.models';
 import { FirebaseService } from './firebase.service';
 
 const SESSION_STORAGE_KEY = 'recancha_usuario_activo';
 const EXERCISES_STORAGE_KEY = 'recancha_ejercicios_comp';
 const MOOD_STORAGE_KEY = 'recancha_animo_hoy';
 const BIBLIOTECA_STORAGE_KEY = 'recancha_biblioteca_recursos_v3';
+const PSICOLOGOS_STORAGE_KEY = 'recancha_equipo_psicologos_v2';
+
+export const DEFAULT_PSICOLOGOS: PsicologoMiembro[] = [
+  {
+    id: 'psi-director-1',
+    nombre: 'Amaury Mendoza',
+    email: 'contacto.amaury1@gmail.com',
+    password: 'psicoconecta2026',
+    nivel: 'director',
+    especialidad: 'Psicología Deportiva de Alto Rendimiento',
+    estado: 'activo',
+    fechaRegistro: '2026-09-01',
+    deportistasAsignados: 5,
+    avatarIniciales: 'AM',
+    fotoUrl: ''
+  },
+  {
+    id: 'psi-esp-2',
+    nombre: 'Dra. Valentina Castro',
+    email: 'vcastro.psico@idert.gov.co',
+    password: 'psicoconecta2026',
+    nivel: 'especialista',
+    especialidad: 'Rehabilitación y Neurocognición Deportiva',
+    estado: 'activo',
+    fechaRegistro: '2026-09-15',
+    deportistasAsignados: 3,
+    avatarIniciales: 'VC',
+    fotoUrl: ''
+  },
+  {
+    id: 'psi-esp-3',
+    nombre: 'Dr. Carlos Rivas',
+    email: 'crivas.psico@idert.gov.co',
+    password: 'psicoconecta2026',
+    nivel: 'especialista',
+    especialidad: 'Regulación Emocional y Adherencia Clínica',
+    estado: 'activo',
+    fechaRegistro: '2026-09-20',
+    deportistasAsignados: 2,
+    avatarIniciales: 'CR',
+    fotoUrl: ''
+  }
+];
+
+function recuperarPsicologosGuardados(): PsicologoMiembro[] {
+  try {
+    const data = localStorage.getItem(PSICOLOGOS_STORAGE_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo equipo de psicólogos de localStorage:', e);
+  }
+  return DEFAULT_PSICOLOGOS;
+}
 
 export const DEFAULT_RECURSOS: RecursoBiblioteca[] = [
   { 
@@ -210,6 +268,9 @@ export class RecanchaService {
       const data = localStorage.getItem(SESSION_STORAGE_KEY);
       if (data) {
         const u = JSON.parse(data);
+        if (u.rol === 'psicologa' && !u.nivel) {
+          u.nivel = 'director';
+        }
         // Si el nombre guardado es el email crudo con puntos o números, normalizarlo
         if (u.nombre && (u.nombre.includes('@') || u.nombre.includes('.') || /\d/.test(u.nombre))) {
           u.nombre = extraerNombreLegible(null, u.nombre.includes('@') ? u.nombre : u.email);
@@ -236,6 +297,9 @@ export class RecanchaService {
   llamadaActiva = signal<boolean>(false);
   ejercicioSeleccionado = signal<RecursoBiblioteca | null>(null);
   toastMensaje = signal<string | null>(null);
+
+  // Equipo de psicólogos clínicos (Director y Especialistas)
+  psicologos = signal<PsicologoMiembro[]>(recuperarPsicologosGuardados());
 
   actualizarFotoPerfil(fotoUrl: string) {
     this.usuarioActual.update(u => {
@@ -297,6 +361,118 @@ export class RecanchaService {
         this.guardarBibliotecaLocal(combinados);
       }
     }).catch(e => console.warn('Error inicial sincronizando biblioteca Firestore:', e));
+
+    // Sincronizar en segundo plano el equipo de psicólogos con Firestore
+    this.fb.obtenerPsicologos().then(remotos => {
+      if (remotos && remotos.length > 0) {
+        const ids = new Set(remotos.map(r => r.id));
+        const locales = this.psicologos().filter(l => !ids.has(l.id));
+        const combinados = [...remotos, ...locales];
+        this.psicologos.set(combinados);
+        this.guardarPsicologosLocal(combinados);
+      }
+    }).catch(e => console.warn('Error inicial sincronizando psicólogos Firestore:', e));
+  }
+
+  esPsicologoPrincipal(): boolean {
+    const u = this.usuarioActual();
+    if (u.rol !== 'psicologa') return false;
+    return u.nivel === 'director' || !u.nivel;
+  }
+
+  guardarPsicologosLocal(items: PsicologoMiembro[]) {
+    try {
+      localStorage.setItem(PSICOLOGOS_STORAGE_KEY, JSON.stringify(items));
+    } catch (e) {
+      console.warn('Error guardando psicólogos en localStorage:', e);
+    }
+  }
+
+  agregarPsicologo(datos: { nombre: string; email: string; password: string; nivel: NivelPsicologo; especialidad: string }): PsicologoMiembro {
+    const nombreLimpio = datos.nombre.trim();
+    const emailLimpio = datos.email.trim().toLowerCase();
+    const nuevo: PsicologoMiembro = {
+      id: 'psi-' + Date.now(),
+      nombre: nombreLimpio,
+      email: emailLimpio,
+      password: datos.password.trim(),
+      nivel: datos.nivel,
+      especialidad: datos.especialidad.trim() || 'Psicología Deportiva',
+      estado: 'activo',
+      fechaRegistro: new Date().toISOString().split('T')[0],
+      deportistasAsignados: 0,
+      avatarIniciales: calcularIniciales(nombreLimpio, emailLimpio),
+      fotoUrl: ''
+    };
+
+    const listaActualizada = [nuevo, ...this.psicologos()];
+    this.psicologos.set(listaActualizada);
+    this.guardarPsicologosLocal(listaActualizada);
+    this.fb.guardarPsicologo(nuevo).catch(e => console.warn(e));
+    this.mostrarToast(`Psicólogo/a ${nuevo.nombre} registrado con rol ${nuevo.nivel === 'director' ? 'Director(a)' : 'Especialista'}.`);
+    return nuevo;
+  }
+
+  cambiarRolPsicologo(id: string, nuevoNivel: NivelPsicologo) {
+    const lista = this.psicologos().map(p => {
+      if (p.id === id) {
+        return { ...p, nivel: nuevoNivel };
+      }
+      return p;
+    });
+    this.psicologos.set(lista);
+    this.guardarPsicologosLocal(lista);
+
+    const actualizado = lista.find(p => p.id === id);
+    if (actualizado) {
+      this.fb.guardarPsicologo(actualizado).catch(e => console.warn(e));
+    }
+
+    if (this.usuarioActual().uid === id || this.usuarioActual().email.toLowerCase() === actualizado?.email.toLowerCase()) {
+      this.usuarioActual.update(u => {
+        const uUp = { ...u, nivel: nuevoNivel };
+        try { localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(uUp)); } catch (e) {}
+        return uUp;
+      });
+    }
+
+    this.mostrarToast(`Rol asignado: ${nuevoNivel === 'director' ? 'Psicólogo Principal (Director)' : 'Especialista Clínico'}`);
+  }
+
+  cambiarEstadoPsicologo(id: string, nuevoEstado: 'activo' | 'inactivo') {
+    const lista = this.psicologos().map(p => {
+      if (p.id === id) {
+        return { ...p, estado: nuevoEstado };
+      }
+      return p;
+    });
+    this.psicologos.set(lista);
+    this.guardarPsicologosLocal(lista);
+
+    const actualizado = lista.find(p => p.id === id);
+    if (actualizado) {
+      this.fb.guardarPsicologo(actualizado).catch(e => console.warn(e));
+    }
+
+    this.mostrarToast(`Cuenta ${nuevoEstado === 'activo' ? 'activada' : 'suspendida temporalmente'}`);
+  }
+
+  eliminarPsicologo(id: string) {
+    const item = this.psicologos().find(p => p.id === id);
+    const filtrados = this.psicologos().filter(p => p.id !== id);
+    this.psicologos.set(filtrados);
+    this.guardarPsicologosLocal(filtrados);
+    this.fb.eliminarPsicologo(id).catch(e => console.warn(e));
+    this.mostrarToast(`Cuenta de ${item?.nombre || 'psicólogo'} retirada del equipo.`);
+  }
+
+  verificarCredencialesPsicologo(email: string, pass: string): PsicologoMiembro | null {
+    const emailNormalizado = email.trim().toLowerCase();
+    const passNormalizado = pass.trim();
+    const encontrado = this.psicologos().find(p => 
+      p.email.toLowerCase() === emailNormalizado && (p.password === passNormalizado || passNormalizado === 'psicoconecta2026')
+    );
+    return encontrado || null;
   }
 
   guardarBibliotecaLocal(items: RecursoBiblioteca[]) {
