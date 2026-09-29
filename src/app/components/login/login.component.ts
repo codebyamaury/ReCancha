@@ -2,7 +2,7 @@ import { Component, inject, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewCh
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RecanchaService, calcularIniciales } from '../../services/recancha.service';
+import { RecanchaService, calcularIniciales, extraerNombreLegible } from '../../services/recancha.service';
 import { FirebaseService } from '../../services/firebase.service';
 import { RolUsuario } from '../../models/recancha.models';
 
@@ -241,6 +241,31 @@ interface SeparatedParticle {
               </span>
               <span *ngIf="cargando" class="btn-text-loading">
                 <span class="spinner-ring white"></span> Validando en Firebase...
+              </span>
+            </button>
+
+            <div class="divider-or">
+              <span>o también ingresa con</span>
+            </div>
+
+            <!-- Botón Oficial de Google para Especialista -->
+            <button 
+              type="button" 
+              class="btn-google-auth" 
+              (click)="ingresarConGoogle()" 
+              [disabled]="cargando"
+              id="btn-google-sign-in-psi">
+              <div class="google-logo-wrapper">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+              </div>
+              <span *ngIf="!cargando" class="btn-text">Continuar con Google</span>
+              <span *ngIf="cargando" class="btn-text-loading">
+                <span class="spinner-ring blue"></span> Conectando cuenta Google...
               </span>
             </button>
           </div>
@@ -1107,20 +1132,22 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       const res = await this.fb.loginWithGoogle();
       const user = res.user;
 
-      const nombre = user.displayName || user.email?.split('@')[0] || 'Deportista';
+      const nombre = extraerNombreLegible(user.displayName, user.email);
       const email = user.email || '';
+      const fotoUrl = user.photoURL || '';
 
       this.service.establecerUsuario({
         uid: user.uid,
         email: email,
         nombre: nombre,
-        rol: 'deportista',
+        rol: this.rolSeleccionado,
         consentimientoLey1581: this.consentimiento,
-        avatarIniciales: calcularIniciales(nombre, email)
+        avatarIniciales: calcularIniciales(nombre, email),
+        fotoUrl: fotoUrl
       });
 
       this.service.mostrarToast(`¡Bienvenido(a), ${nombre}!`);
-      this.router.navigate(['/app/inicio']);
+      this.router.navigate([this.rolSeleccionado === 'psicologa' ? '/app/inicio-psicologa' : '/app/inicio']);
     } catch (err: any) {
       console.error('Error al ingresar con Google:', err);
       this.mensajeError = this.traducirErrorFirebase(err);
@@ -1148,8 +1175,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       const res = await this.fb.loginWithEmail(this.email.trim(), this.password);
       const user = res.user;
 
-      const nombre = user.displayName || this.email.trim().split('@')[0];
+      const nombre = extraerNombreLegible(user.displayName, user.email || this.email.trim());
       const email = user.email || this.email.trim();
+      const fotoUrl = user.photoURL || '';
 
       this.service.establecerUsuario({
         uid: user.uid,
@@ -1157,7 +1185,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         nombre: nombre,
         rol: 'psicologa',
         consentimientoLey1581: this.consentimiento,
-        avatarIniciales: calcularIniciales(nombre, email)
+        avatarIniciales: calcularIniciales(nombre, email),
+        fotoUrl: fotoUrl
       });
 
       this.service.mostrarToast(`¡Bienvenida(o), ${nombre}!`);

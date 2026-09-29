@@ -7,6 +7,7 @@ export interface UsuarioReCancha {
   rol: RolUsuario;
   consentimientoLey1581: boolean;
   avatarIniciales: string;
+  fotoUrl?: string;
 }
 
 export interface DeportistaClinica {

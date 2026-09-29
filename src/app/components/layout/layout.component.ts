@@ -165,7 +165,23 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
               <span class="name">{{ service.usuarioActual().nombre || 'Usuario' }}</span>
               <span class="role">{{ service.usuarioActual().rol === 'deportista' ? 'Deportista IDERT' : 'Psicólogo/a Especialista' }}</span>
             </div>
-            <div class="avatar-badge">{{ service.usuarioActual().avatarIniciales || 'PC' }}</div>
+            
+            <div class="avatar-badge" (click)="fileInput.click()" title="Cambiar o subir foto de perfil">
+              <img 
+                *ngIf="service.usuarioActual().fotoUrl && !fotoConError" 
+                [src]="service.usuarioActual().fotoUrl" 
+                [alt]="service.usuarioActual().nombre" 
+                class="avatar-photo"
+                (error)="onFotoError()">
+              <span *ngIf="!service.usuarioActual().fotoUrl || fotoConError">{{ service.usuarioActual().avatarIniciales || 'PC' }}</span>
+              <span class="avatar-edit-overlay" title="Cambiar foto">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </span>
+            </div>
+            <input #fileInput type="file" accept="image/*" class="sr-only" (change)="onFotoSeleccionada($event)">
           </div>
         </header>
 
@@ -461,9 +477,9 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
     .role { display: block; font-size: 0.72rem; color: #ec4899; font-weight: 600; }
     
     .avatar-badge { 
-      width: 38px; 
-      height: 38px; 
-      border-radius: 10px; 
+      width: 40px; 
+      height: 40px; 
+      border-radius: 12px; 
       background: linear-gradient(135deg, #2563eb 0%, #ec4899 100%); 
       display: flex; 
       align-items: center; 
@@ -473,6 +489,37 @@ import { EjercicioModalComponent } from '../deportista/ejercicio-modal.component
       color: #ffffff; 
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
       flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      transition: all 0.2s ease;
+    }
+    .avatar-badge:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35);
+    }
+    .avatar-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+    .avatar-edit-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      border-radius: 10px;
+    }
+    .avatar-badge:hover .avatar-edit-overlay {
+      opacity: 1;
     }
     
     .page-container { 
@@ -624,6 +671,7 @@ export class LayoutComponent {
   service = inject(RecanchaService);
   router = inject(Router);
   sidebarAbierta = false;
+  fotoConError = false;
 
   toggleSidebar() {
     this.sidebarAbierta = !this.sidebarAbierta;
@@ -631,6 +679,23 @@ export class LayoutComponent {
 
   cerrarSidebar() {
     this.sidebarAbierta = false;
+  }
+
+  onFotoError() {
+    this.fotoConError = true;
+  }
+
+  onFotoSeleccionada(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoConError = false;
+        this.service.actualizarFotoPerfil(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   salir() {

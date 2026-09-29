@@ -158,17 +158,43 @@ function recuperarBibliotecaGuardada(): RecursoBiblioteca[] {
   return DEFAULT_RECURSOS;
 }
 
+export function extraerNombreLegible(displayName?: string | null, email?: string | null): string {
+  if (displayName && displayName.trim().length > 0) {
+    return displayName.trim();
+  }
+  if (!email || !email.includes('@')) {
+    return 'Usuario Especialista';
+  }
+  
+  let local = email.split('@')[0].trim().toLowerCase();
+  
+  // Quitar prefijos comunes de correo si van seguidos de un nombre (ej. contacto.amaury1 -> amaury1)
+  local = local.replace(/^(contacto|info|soporte|admin|psico|dr|dra)[\._\-]/i, '');
+  
+  // Separar por puntos, guiones y guiones bajos
+  let partes = local.split(/[\._\-]+/).filter(p => p.length > 0);
+  
+  // Limpiar dígitos finales (ej. amaury1 -> amaury)
+  partes = partes.map(p => p.replace(/\d+$/g, '').trim()).filter(p => p.length > 0);
+  
+  if (partes.length === 0) {
+    return 'Usuario';
+  }
+  
+  // Capitalizar cada palabra (ej. "amaury" -> "Amaury", "amaury mendoza" -> "Amaury Mendoza")
+  return partes
+    .map(p => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+    .join(' ');
+}
+
 export function calcularIniciales(nombre?: string | null, email?: string | null): string {
-  if (nombre && nombre.trim().length > 0) {
-    const partes = nombre.trim().split(/\s+/).filter(p => p.length > 0);
+  const nombreLimpio = extraerNombreLegible(nombre, email);
+  if (nombreLimpio && nombreLimpio.trim().length > 0) {
+    const partes = nombreLimpio.trim().split(/\s+/).filter(p => p.length > 0);
     if (partes.length >= 2) {
       return (partes[0][0] + partes[1][0]).toUpperCase();
     }
     return partes[0].substring(0, Math.min(2, partes[0].length)).toUpperCase();
-  }
-  if (email && email.trim().length > 0) {
-    const parteLocal = email.split('@')[0];
-    return parteLocal.substring(0, Math.min(2, parteLocal.length)).toUpperCase();
   }
   return 'PC';
 }
@@ -183,7 +209,13 @@ export class RecanchaService {
     try {
       const data = localStorage.getItem(SESSION_STORAGE_KEY);
       if (data) {
-        return JSON.parse(data);
+        const u = JSON.parse(data);
+        // Si el nombre guardado es el email crudo con puntos o números, normalizarlo
+        if (u.nombre && (u.nombre.includes('@') || u.nombre.includes('.') || /\d/.test(u.nombre))) {
+          u.nombre = extraerNombreLegible(null, u.nombre.includes('@') ? u.nombre : u.email);
+          u.avatarIniciales = calcularIniciales(u.nombre, u.email);
+        }
+        return u;
       }
     } catch (e) {
       console.warn('Error leyendo sesión de localStorage:', e);
@@ -194,7 +226,8 @@ export class RecanchaService {
       nombre: '',
       rol: 'deportista',
       consentimientoLey1581: false,
-      avatarIniciales: 'PC'
+      avatarIniciales: 'PC',
+      fotoUrl: ''
     };
   }
 
@@ -203,6 +236,32 @@ export class RecanchaService {
   llamadaActiva = signal<boolean>(false);
   ejercicioSeleccionado = signal<RecursoBiblioteca | null>(null);
   toastMensaje = signal<string | null>(null);
+
+  actualizarFotoPerfil(fotoUrl: string) {
+    this.usuarioActual.update(u => {
+      const updated = { ...u, fotoUrl };
+      try {
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {}
+      this.fb.sincronizarUsuario(updated).catch(() => {});
+      return updated;
+    });
+    this.mostrarToast('Foto de perfil actualizada correctamente');
+  }
+
+  actualizarNombrePerfil(nombre: string) {
+    if (!nombre.trim()) return;
+    this.usuarioActual.update(u => {
+      const nuevoNombre = nombre.trim();
+      const updated = { ...u, nombre: nuevoNombre, avatarIniciales: calcularIniciales(nuevoNombre, u.email) };
+      try {
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {}
+      this.fb.sincronizarUsuario(updated).catch(() => {});
+      return updated;
+    });
+    this.mostrarToast('Nombre de perfil actualizado');
+  }
 
   // Biblioteca clínica de recursos (persistida localmente y en Firestore)
   biblioteca = signal<RecursoBiblioteca[]>(recuperarBibliotecaGuardada());
