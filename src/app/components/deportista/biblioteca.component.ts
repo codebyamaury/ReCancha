@@ -840,13 +840,13 @@ export class BibliotecaComponent {
 
   getModalidadLabel(modalidad?: ModalidadEjercicio): string {
     switch (modalidad) {
-      case 'respiracion': return '🫁 Entrenador Respiratorio';
-      case 'reestructuracion': return '🧠 Herramienta TCC';
-      case 'autodialogo': return '💬 Autodiálogo Deportivo';
-      case 'visualizacion': return '👁️ Imaginería Motora';
-      case 'metas': return '🎯 Micro-Metas SMART';
-      case 'lectura': return '📖 Protocolo Clínico';
-      default: return '⚡ Intervención Clínica';
+      case 'respiracion': return 'Entrenador Respiratorio';
+      case 'reestructuracion': return 'Herramienta TCC';
+      case 'autodialogo': return 'Autodiálogo Deportivo';
+      case 'visualizacion': return 'Imaginería Motora';
+      case 'metas': return 'Micro-Metas SMART';
+      case 'lectura': return 'Protocolo Clínico';
+      default: return 'Intervención Clínica';
     }
   }
 }

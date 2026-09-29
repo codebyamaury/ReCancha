@@ -62,7 +62,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
           <strong>¿Cómo darle el rol de Psicólogo Principal a otra persona?</strong>
           <p>
             Puedes hacerlo de 2 formas:
-            <strong>1)</strong> En la tarjeta del colega, haz clic en el botón dorado <strong>"👑 Nombrar Psicólogo Principal"</strong> (o cambia su selector de rol a <em>Psicólogo Principal</em>). Podrás elegir si compartir la dirección o transferirla por completo.
+            <strong>1)</strong> En la tarjeta del colega, haz clic en el botón dorado <strong>"Nombrar Psicólogo Principal"</strong> (o cambia su selector de rol a <em>Psicólogo Principal</em>). Podrás elegir si compartir la dirección o transferirla por completo.
             <strong>2)</strong> Al registrar un nuevo colega con el botón <strong>"+ Registrar Psicólogo/a"</strong>, selecciona directamente el rol <em>Psicólogo Principal (Director)</em>.
           </p>
         </div>
@@ -136,8 +136,11 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
             [(ngModel)]="terminoBusqueda" 
             placeholder="Buscar por nombre, correo institucional o área de especialidad..." 
             class="search-input">
-          <button *ngIf="terminoBusqueda" type="button" class="btn-clear-search" (click)="terminoBusqueda = ''">
-            ✕
+          <button *ngIf="terminoBusqueda" type="button" class="btn-clear-search" (click)="terminoBusqueda = ''" aria-label="Limpiar búsqueda">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </button>
         </div>
 
@@ -239,7 +242,7 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
               </svg>
-              <span>👑 Nombrar Psicólogo Principal</span>
+              <span>Nombrar Psicólogo Principal</span>
             </button>
 
             <button 
@@ -262,8 +265,8 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                 class="role-select" 
                 [ngModel]="p.nivel" 
                 (ngModelChange)="onCambiarRol(p, $event)">
-                <option value="director">👑 Psicólogo Principal (Director)</option>
-                <option value="especialista">🩺 Especialista Clínico</option>
+                <option value="director">Psicólogo Principal (Director)</option>
+                <option value="especialista">Especialista Clínico</option>
               </select>
             </div>
 
@@ -400,7 +403,10 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
               Genera los accesos directos para el nuevo profesional. Podrá ingresar de inmediato a <strong>PsicoConecta</strong> con este correo y contraseña.
             </p>
             <button type="button" class="btn-close-modal" (click)="cerrarModalRegistro()" aria-label="Cerrar ventana">
-              ✕
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </header>
 
@@ -448,7 +454,15 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
               <div class="label-row-action">
                 <label for="nuevo-password" class="form-label">Contraseña de Acceso *</label>
                 <button type="button" class="btn-link-action" (click)="generarPasswordSegura()">
-                  🎲 Generar contraseña segura
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"></circle>
+                    <circle cx="15.5" cy="15.5" r="1.5" fill="currentColor"></circle>
+                    <circle cx="15.5" cy="8.5" r="1.5" fill="currentColor"></circle>
+                    <circle cx="8.5" cy="15.5" r="1.5" fill="currentColor"></circle>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+                  </svg>
+                  <span>Generar contraseña segura</span>
                 </button>
               </div>
               <div class="input-with-icon input-with-toggle">
@@ -468,9 +482,17 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
                   type="button" 
                   class="btn-toggle-eye" 
                   (click)="mostrarPassModal = !mostrarPassModal"
-                  aria-label="Ver u ocultar contraseña">
-                  <span *ngIf="!mostrarPassModal">👁️</span>
-                  <span *ngIf="mostrarPassModal">🙈</span>
+                  [attr.aria-label]="mostrarPassModal ? 'Ocultar contraseña' : 'Ver contraseña'">
+                  <svg *ngIf="!mostrarPassModal" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg *ngIf="mostrarPassModal" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                    <line x1="2" y1="2" x2="22" y2="22"></line>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -558,7 +580,12 @@ import { NivelPsicologo, PsicologoMiembro } from '../../models/recancha.models';
             <p class="modal-subtitle">
               Comparte estos datos con el profesional para que pueda iniciar sesión en la plataforma.
             </p>
-            <button type="button" class="btn-close-modal" (click)="psicologoCredenciales = null">✕</button>
+            <button type="button" class="btn-close-modal" (click)="psicologoCredenciales = null" aria-label="Cerrar credenciales">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </header>
 
           <div class="credentials-box">

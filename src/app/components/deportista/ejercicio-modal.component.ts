@@ -184,14 +184,17 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
               (click)="c.volteada = !c.volteada">
               <div class="card-inner">
                 <div class="card-front">
-                  <div class="card-badge red">❌ Pensamiento Limitante</div>
+                  <div class="card-badge red">Pensamiento Limitante</div>
                   <p class="card-text">"{{ c.limitante }}"</p>
-                  <span class="flip-hint">Toca para reencuadrar ➔</span>
+                  <span class="flip-hint">
+                    <span>Toca para reencuadrar</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </span>
                 </div>
                 <div class="card-back">
-                  <div class="card-badge green">✅ Afirmación Potenciadora</div>
+                  <div class="card-badge green">Afirmación Potenciadora</div>
                   <p class="card-text">"{{ c.potenciadora }}"</p>
-                  <span class="flip-hint">✓ Grabado en mente deportiva</span>
+                  <span class="flip-hint">Grabado en mente deportiva</span>
                 </div>
               </div>
             </div>
@@ -208,7 +211,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
                 placeholder="Ejemplo: Hoy pongo mi cuerpo y mente en cada repetición.">
               <button type="button" class="btn-save-mantra" (click)="guardarMantra()">Guardar</button>
             </div>
-            <p class="mantra-success" *ngIf="mantraGuardado">✓ Afirmación fijada en tu bitácora de seguimiento.</p>
+            <p class="mantra-success" *ngIf="mantraGuardado">Afirmación fijada en tu bitácora de seguimiento.</p>
           </div>
         </div>
 
@@ -318,7 +321,7 @@ type FaseRespiracion = 'inhalar' | 'sostener' | 'exhalar';
               [(ngModel)]="reflexionLectura" 
               placeholder="¿Qué aprendizaje o sensación te deja esta lectura para tu proceso actual?"></textarea>
             <button type="button" class="btn-save-reflection" (click)="guardarReflexion()">
-              {{ reflexionGuardada ? '✓ Reflexión guardada en expediente' : 'Guardar notas de la sesión' }}
+              {{ reflexionGuardada ? 'Reflexión guardada en expediente' : 'Guardar notas de la sesión' }}
             </button>
           </div>
         </div>
@@ -925,7 +928,7 @@ export class EjercicioModalComponent implements OnInit, OnDestroy {
 
   guardarTcc() {
     this.tccGuardado = true;
-    this.service.mostrarToast('✓ Reestructuración cognitiva registrada');
+    this.service.mostrarToast('Reestructuración cognitiva registrada');
     setTimeout(() => { this.tccGuardado = false; }, 3500);
   }
 
@@ -956,7 +959,7 @@ export class EjercicioModalComponent implements OnInit, OnDestroy {
   guardarMantra() {
     if (!this.miMantra.trim()) return;
     this.mantraGuardado = true;
-    this.service.mostrarToast('✓ Autoafirmación fijada en tu bitácora');
+    this.service.mostrarToast('Autoafirmación fijada en tu bitácora');
     setTimeout(() => { this.mantraGuardado = false; }, 3000);
   }
 
@@ -1040,7 +1043,7 @@ export class EjercicioModalComponent implements OnInit, OnDestroy {
       completada: false
     });
     this.nuevaMetaTexto = '';
-    this.service.mostrarToast('✓ Nueva meta clínica agregada');
+    this.service.mostrarToast('Nueva meta clínica agregada');
   }
 
   porcentajeMetas(): number {
@@ -1056,7 +1059,7 @@ export class EjercicioModalComponent implements OnInit, OnDestroy {
   guardarReflexion() {
     if (!this.reflexionLectura.trim()) return;
     this.reflexionGuardada = true;
-    this.service.mostrarToast('✓ Reflexión guardada en expediente');
+    this.service.mostrarToast('Reflexión guardada en expediente');
     setTimeout(() => { this.reflexionGuardada = false; }, 3000);
   }
 
